@@ -4,26 +4,26 @@ import { useState } from "react";
 
 const sliderData = [
   {
-    heading: "Elevate Your Future with Top Engineering Scholarships",
+    heading: "Discover Your Dream Scholarship Today",
     paragraph:
-      "Discover prestigious scholarships for aspiring engineers. Get access to funding for your bachelor's, master's, or doctoral studies. Don't miss out on the opportunity to turn your dreams into reality.",
-    button: "Find Engineering Scholarships",
+      "Unlock your potential with a wide range of scholarships. From engineering to arts, find the perfect opportunity to fund your education and achieve your academic goals.",
+    button: "Explore Scholarships",
     imageURL:
       "https://i.postimg.cc/5tn86Vtx/shamin-haky-RIk-i9r-XPao-unsplash.jpg",
   },
   {
-    heading: "Unlock Your Scholarship Potential: Expert Tips Inside",
+    heading: "Get Expert Guidance on Your Scholarship Journey",
     paragraph:
-      "Applying for scholarships can be challenging. We've got you covered with expert guidance and resources to help you craft a winning application. From personal statements to interview prep, we'll help you shine.",
-    button: "Get Application Tips",
+      "Navigating the scholarship application process can be tough. Access our resources and tips to craft a winning application and increase your chances of success.",
+    button: "Learn More",
     imageURL:
       "https://i.postimg.cc/nLHvFzpR/vasily-koloda-8-Cq-Dv-Puo-k-I-unsplash.jpg",
   },
   {
-    heading: "Your Global Adventure Awaits: Explore Study Abroad Scholarships",
+    heading: "Full Fund Scholarship at Oxford University",
     paragraph:
-      "Dreaming of studying in a new country? We can help you find scholarships to fund your international education. Experience diverse cultures, broaden your horizons, and gain a global perspective.",
-    button: "Discover Global Scholarships",
+      "Don't miss out on this prestigious scholarship opportunity. Apply now for a chance to study at one of the world's top universities. Deadline: December 15, 2024",
+    button: "Apply Now",
     imageURL:
       "https://i.postimg.cc/W3zgZHD0/qingqing-cai-158z33c3-H5o-unsplash.jpg",
   },
@@ -52,9 +52,12 @@ const Slider = () => {
   }
 
   return (
-    <div ref={sliderRef} className="keen-slider zoom-out container mx-auto">
+    <section ref={sliderRef} className="keen-slider zoom-out container mx-auto mb-12 md:mb-16">
       {sliderData.map((item, idx) => (
-        <div key={idx} className="keen-slider__slide zoom-out__slide">
+        <div
+          key={idx}
+          className="keen-slider__slide zoom-out__slide md:rounded-2xl"
+        >
           <div style={scaleStyle(idx)}>
             <div
               className="hero h-[50dvh] md:h-[60dvh]"
@@ -71,7 +74,7 @@ const Slider = () => {
                   <p className="mb-5 md:w-4/5 md:mx-auto font-hind">
                     {item.paragraph}
                   </p>
-                  <button className="btn bg-orange text-white border-none shadow-none rounded-none font-hind">
+                  <button className="btn bg-orange text-white border-none shadow-none font-hind">
                     {item.button}
                   </button>
                 </div>
@@ -80,7 +83,7 @@ const Slider = () => {
           </div>
         </div>
       ))}
-    </div>
+    </section>
   );
 };
 

@@ -29,7 +29,7 @@ const Navbar = () => {
               </div>
               <ul
                 tabIndex={0}
-                className="menu menu-sm dropdown-content bg-base-100  z-[1] mt-3 w-52 p-2 shadow"
+                className="menu menu-sm rounded-box dropdown-content bg-base-100  z-[1] mt-3 w-52 p-2 shadow"
               >
                 <li>
                   <Link to={"/"}>Home</Link>
@@ -61,10 +61,10 @@ const Navbar = () => {
           </div>
           <div className="navbar-end">
             <div className="space-x-2">
-              <Link className="btn rounded-none bg-orange text-white">
+              <Link className="btn bg-orange text-white">
                 Login
               </Link>
-              <Link className="btn rounded-none bg-blue text-white">
+              <Link className="btn bg-blue text-white">
                 Register
               </Link>
             </div>
