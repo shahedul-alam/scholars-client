@@ -5,7 +5,17 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    colors: {
+      'orange': '#fb9b04',
+      'blue': '#045383',
+      'white': '#fff',
+    },
+    extend: {
+      fontFamily: {
+        "montserrat": ["Montserrat", "sans-serif"],
+        "hind": ["Hind", "sans-serif"],
+      }
+    },
   },
   plugins: [
     require('daisyui'),

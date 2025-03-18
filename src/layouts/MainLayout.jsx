@@ -1,11 +1,12 @@
 import { Outlet } from "react-router";
+import Navbar from "../shared/Navbar";
 
 const MainLayout = () => {
   return (
-    <>
-      <h1>scholars!</h1>
+    <main>
+      <Navbar />
       <Outlet />
-    </>
+    </main>
   );
 };
 
