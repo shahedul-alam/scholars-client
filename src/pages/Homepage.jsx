@@ -1,4 +1,3 @@
-import React from "react";
 import Slider from "../components/homepage/Slider";
 import HowScholarsWorks from "../components/homepage/HowScholarsWorks";
 import Frequently from "../components/homepage/Frequently";
