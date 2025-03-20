@@ -4,6 +4,7 @@ const Frequently = () => {
       <h2 className="text-4xl font-bold font-montserrat text-center mb-8">
         Frequently Asked Questions
       </h2>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-5 font-hind">
         <div className="join join-vertical w-full">
           <div className="collapse collapse-arrow join-item border-base-300 border">
@@ -60,7 +61,7 @@ const Frequently = () => {
 
         <div className="join join-vertical w-full">
           <div className="collapse collapse-arrow join-item border-base-300 border">
-            <input type="radio" name="my-accordion-4" defaultChecked />
+            <input type="radio" name="my-accordion-4" />
             <div className="collapse-title text-xl font-medium">
               Is Scholars completely free?
             </div>
