@@ -4,11 +4,9 @@ import { Link, useLoaderData } from "react-router";
 const calAvgRating = (data) => {
   let sum = 0;
   for (let i = 0; i < data.length; i++) {
-    console.log(i);
     sum += data[0].ratingPoint;
   }
 
-  console.log(sum);
   return sum / data.length;
 };
 
@@ -164,7 +162,7 @@ const FeaturedScholarshipCards = ({ data }) => {
       </div>
 
       <Link
-        to={`/scholarship-details/${_id}`}
+        to={`/scholarships/${_id}`}
         className="w-full btn bg-blue text-white border-none font-hind"
       >
         See Details
@@ -197,7 +195,7 @@ const FeaturedScholarship = () => {
       <div className="flex justify-center">
         <Link
           to={"/all-scholarships"}
-          className="btn bg-orange border-none text-white"
+          className="btn btn-lg btn-wide bg-orange border-none font-hind text-white"
         >
           See all scholarships
         </Link>
