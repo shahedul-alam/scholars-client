@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.69.0",
     "axios": "^1.8.4",
     "keen-slider": "^6.8.6",
     "lottie-react": "^2.4.1",

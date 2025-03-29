@@ -4,7 +4,7 @@ import Homepage from "../pages/Homepage";
 import { scholarshipLoader } from "../components/homepage/FeaturedScholarship";
 import ScholarshipDetailsPage, { scholarshipDetailsLoader } from "../pages/ScholarshipDetailsPage";
 import ErrorPage from "../pages/ErrorPage";
-import AllScholarship from "../pages/AllScholarship";
+import AllScholarshipPage from "../pages/AllScholarshipPage";
 
 const router = createBrowserRouter([
   {
@@ -24,7 +24,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/all-scholarship",
-        element: <AllScholarship />,
+        element: <AllScholarshipPage />,
       }
     ],
   },

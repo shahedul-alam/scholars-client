@@ -10,7 +10,7 @@ const calAvgRating = (data) => {
   return sum / data.length;
 };
 
-const FeaturedScholarshipCards = ({ data }) => {
+export const FeaturedScholarshipCards = ({ data }) => {
   const {
     _id,
     universityImageLogo,
@@ -27,12 +27,12 @@ const FeaturedScholarshipCards = ({ data }) => {
     reviews.length === 0 ? "Not available" : calAvgRating(reviews);
 
   return (
-    <div className="flex flex-col p-5 border border-orange rounded-xl">
+    <div className="flex flex-col p-5 border border-blue rounded-xl">
       <div className="mb-2">
         <img
           src={universityImageLogo}
           alt={`${universityName} Logo`}
-          className="w-3/4 border h-20 object-contain mb-4 rounded-xl border-orange"
+          className="w-3/4 border h-20 object-contain mb-4 rounded-xl border-blue"
         />
         <h2 className="text-xl font-montserrat font-semibold">
           {universityName}
@@ -194,7 +194,7 @@ const FeaturedScholarship = () => {
 
       <div className="flex justify-center">
         <Link
-          to={"/all-scholarships"}
+          to={"/all-scholarship"}
           className="btn btn-lg btn-wide bg-orange border-none font-hind text-white"
         >
           See all scholarships
