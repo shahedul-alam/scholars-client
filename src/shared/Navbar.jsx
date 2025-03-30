@@ -1,6 +1,21 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import useAuth from "../hooks/useAuth";
 
 const Navbar = () => {
+  const { user, signoutUser, successToast, errorToast } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignout = () => {
+    signoutUser()
+      .then(() => {
+        successToast("Signout successfully.");
+        navigate("/login");
+      })
+      .catch(() => {
+        errorToast("Uh-oh! We couldn't sign you out.");
+      });
+  };
+  
   return (
     <header>
       <nav className="container mx-auto font-hind">
@@ -60,14 +75,37 @@ const Navbar = () => {
             </ul>
           </div>
           <div className="navbar-end">
-            <div className="space-x-2">
-              <Link className="btn bg-orange text-white">
-                Login
-              </Link>
-              <Link className="btn bg-blue text-white">
-                Register
-              </Link>
-            </div>
+            {user ? (
+              <div className="space-x-2">
+                <div
+                  tabIndex={0}
+                  role="button"
+                  className="btn btn-ghost btn-circle avatar"
+                >
+                  <div className="w-10 rounded-full">
+                    <img
+                      alt={`${user.displayName} photo`}
+                      src={user.photoURL}
+                    />
+                  </div>
+                </div>
+                <button
+                  className="btn bg-orange text-white"
+                  onClick={handleSignout}
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <div className="space-x-2">
+                <Link to={"/login"} className="btn bg-orange text-white">
+                  Login
+                </Link>
+                <Link to={"/register"} className="btn bg-blue text-white">
+                  Register
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </nav>

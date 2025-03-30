@@ -5,6 +5,8 @@ import { scholarshipLoader } from "../components/homepage/FeaturedScholarship";
 import ScholarshipDetailsPage, { scholarshipDetailsLoader } from "../pages/ScholarshipDetailsPage";
 import ErrorPage from "../pages/ErrorPage";
 import AllScholarshipPage from "../pages/AllScholarshipPage";
+import LoginPage from "../pages/LoginPage";
+import RegisterPage from "../pages/RegisterPage";
 
 const router = createBrowserRouter([
   {
@@ -25,7 +27,15 @@ const router = createBrowserRouter([
       {
         path: "/all-scholarship",
         element: <AllScholarshipPage />,
-      }
+      },
+      {
+        path: "/login",
+        element: <LoginPage />,
+      },
+      {
+        path: "/register",
+        element: <RegisterPage />,
+      },
     ],
   },
 ]);
