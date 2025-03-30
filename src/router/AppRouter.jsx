@@ -7,6 +7,7 @@ import ErrorPage from "../pages/ErrorPage";
 import AllScholarshipPage from "../pages/AllScholarshipPage";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
+import PrivateRoute from "./PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -20,7 +21,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/scholarships/:id",
-        element: <ScholarshipDetailsPage />,
+        element:  <PrivateRoute><ScholarshipDetailsPage /></PrivateRoute>,
         loader: scholarshipDetailsLoader,
         errorElement: <ErrorPage />,
       },
