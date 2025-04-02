@@ -2,12 +2,15 @@ import { createBrowserRouter, RouterProvider } from "react-router";
 import MainLayout from "../layouts/MainLayout";
 import Homepage from "../pages/Homepage";
 import { scholarshipLoader } from "../components/homepage/FeaturedScholarship";
-import ScholarshipDetailsPage, { scholarshipDetailsLoader } from "../pages/ScholarshipDetailsPage";
+import ScholarshipDetailsPage, {
+  scholarshipDetailsLoader,
+} from "../pages/ScholarshipDetailsPage";
 import ErrorPage from "../pages/ErrorPage";
 import AllScholarshipPage from "../pages/AllScholarshipPage";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import PrivateRoute from "./PrivateRoute";
+import NotFoundPage from "../pages/NotFoundPage";
 
 const router = createBrowserRouter([
   {
@@ -21,7 +24,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/scholarships/:id",
-        element:  <PrivateRoute><ScholarshipDetailsPage /></PrivateRoute>,
+        element: (
+          <PrivateRoute>
+            <ScholarshipDetailsPage />
+          </PrivateRoute>
+        ),
         loader: scholarshipDetailsLoader,
         errorElement: <ErrorPage />,
       },
@@ -36,6 +43,10 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: <RegisterPage />,
+      },
+      {
+        path: "*",
+        element: <NotFoundPage />,
       },
     ],
   },
