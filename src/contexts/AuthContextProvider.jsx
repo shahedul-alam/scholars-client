@@ -1,8 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { auth } from "../firebase/firebase.config";
 import { Bounce, toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { axiosInstance } from "../hooks/useAxiosSecure";
 import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
@@ -13,28 +11,40 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
+import "react-toastify/dist/ReactToastify.css";
+import { axiosInstance } from "../hooks/useAxiosSecure";
+import { getUser } from "../utilities/utilities";
 
 export const AuthContext = createContext();
 
 const AuthContextProvider = ({ children }) => {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
+  const [dbUser, setDbUser] = useState(null);
+  const [dbUserInitialized, setDbUserInitialized] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
 
-      setLoading(false);
-
+      if (currentUser && !dbUserInitialized) {
+        const result = await getUser(currentUser);
+        setDbUser(result);
+      } else if (!currentUser) {
+        setDbUser(null);
+      }
+      
       // if (currentUser) {
-      //   axiosInstance
-      //     .post("/get-token", { email: currentUser.email })
-      //     .then((res) => setLoading(false));
-      // } else {
-      //   axiosInstance
-      //     .post("/remove-token", {})
-      //     .then((res) => setLoading(false));
+      //     axiosInstance
+      //       .post("/get-token", { email: currentUser.email })
+      //       .then((res) => setLoading(false));
+      //   } else {
+      //     axiosInstance
+      //       .post("/remove-token", {})
+      //       .then((res) => setLoading(false));
       // }
+
+      setLoading(false);
     });
 
     return () => {
@@ -97,6 +107,9 @@ const AuthContextProvider = ({ children }) => {
 
   const authInfo = {
     user,
+    dbUser,
+    setDbUser,
+    setDbUserInitialized,
     loading,
     createNewUser,
     signinUser,

@@ -1,8 +1,8 @@
-import { Link, useNavigate } from "react-router";
+import { Link, NavLink, useNavigate } from "react-router";
 import useAuth from "../hooks/useAuth";
 
 const Navbar = () => {
-  const { user, signoutUser, successToast, errorToast } = useAuth();
+  const { user, dbUser, signoutUser, successToast, errorToast } = useAuth();
   const navigate = useNavigate();
 
   const handleSignout = () => {
@@ -15,7 +15,18 @@ const Navbar = () => {
         errorToast("Uh-oh! We couldn't sign you out.");
       });
   };
-  
+
+  let dashboardRoute;
+  if (dbUser?.role) {
+    if (dbUser.role === "user") {
+      dashboardRoute = "user-dashboard";
+    } else if (dbUser.role === "moderator") {
+      dashboardRoute = "moderator-dashboard";
+    } else {
+      dashboardRoute = "admin-dashboard";
+    }
+  }
+
   return (
     <header>
       <nav className="container mx-auto font-hind">
@@ -47,13 +58,34 @@ const Navbar = () => {
                 className="menu menu-sm rounded-box dropdown-content bg-base-100  z-[1] mt-3 w-52 p-2 shadow"
               >
                 <li>
-                  <Link to={"/"}>Home</Link>
+                  <NavLink
+                    to={"/"}
+                    className={({ isActive }) =>
+                      isActive && "bg-orange text-white font-semibold shadow"
+                    }
+                  >
+                    Home
+                  </NavLink>
                 </li>
                 <li>
-                  <Link to={"/all-scholarship"}>All Scholarship</Link>
+                  <NavLink
+                    to={"all-scholarship"}
+                    className={({ isActive }) =>
+                      isActive && "bg-orange text-white font-semibold shadow"
+                    }
+                  >
+                    All Scholarship
+                  </NavLink>
                 </li>
                 <li>
-                  <Link to={"/dashboard"}>Dashboard</Link>
+                  <NavLink
+                    to={dashboardRoute}
+                    className={({ isActive }) =>
+                      isActive && "bg-orange text-white font-semibold shadow"
+                    }
+                  >
+                    Dashboard
+                  </NavLink>
                 </li>
               </ul>
             </div>
@@ -64,13 +96,34 @@ const Navbar = () => {
           <div className="navbar-center hidden lg:flex">
             <ul className="menu menu-horizontal px-1">
               <li>
-                <Link to={"/"}>Home</Link>
+                <NavLink
+                  to={"/"}
+                  className={({ isActive }) =>
+                    isActive && "text-orange font-semibold"
+                  }
+                >
+                  Home
+                </NavLink>
               </li>
               <li>
-                <Link to={"/all-scholarship"}>All Scholarship</Link>
+                <NavLink
+                  to={"all-scholarship"}
+                  className={({ isActive }) =>
+                    isActive && "text-orange font-semibold"
+                  }
+                >
+                  All Scholarship
+                </NavLink>
               </li>
               <li>
-                <Link to={"/dashboard"}>Dashboard</Link>
+                <NavLink
+                  to={dashboardRoute}
+                  className={({ isActive }) =>
+                    isActive && "text-orange font-semibold"
+                  }
+                >
+                  Dashboard
+                </NavLink>
               </li>
             </ul>
           </div>
@@ -98,10 +151,10 @@ const Navbar = () => {
               </div>
             ) : (
               <div className="space-x-2">
-                <Link to={"/login"} className="btn bg-orange text-white">
+                <Link to={"login"} className="btn bg-orange text-white">
                   Login
                 </Link>
-                <Link to={"/register"} className="btn bg-blue text-white">
+                <Link to={"register"} className="btn bg-blue text-white">
                   Register
                 </Link>
               </div>

@@ -42,7 +42,7 @@ const ScholarshipDetailsBar = ({ data }) => {
       </div>
 
       <Link
-        to={`/scholarship-apply/${_id}`}
+        to={`/scholarships/${_id}/payment`}
         className="w-full md:btn-wide btn bg-blue text-white font-hind border-none"
       >
         Apply Now

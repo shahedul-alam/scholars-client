@@ -1,15 +1,22 @@
 import { Link, useLocation, useNavigate } from "react-router";
 import banner from "../assets/login-page-banner.JPG";
 import useAuth from "../hooks/useAuth";
+import { addUser } from "../utilities/utilities";
 
 // import { Helmet } from "react-helmet-async";
 
 const LoginPage = () => {
-  const { signinUser, logInWithGoogle, successToast, errorToast, loading } =
-    useAuth();
+  const {
+    setDbUser,
+    setDbUserInitialized,
+    signinUser,
+    logInWithGoogle,
+    successToast,
+    errorToast,
+    loading,
+  } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-
   const from = location.state || "/";
 
   const handleSignInUser = (e) => {
@@ -20,36 +27,36 @@ const LoginPage = () => {
     const password = form.password.value;
 
     signinUser(email, password)
-      .then(() => {
-        // showing successful login alert
+      .then(async () => {
+        const result = await getUser({ email });
+        setDbUser(result);
+        setDbUserInitialized(true);
+
         successToast("Welcome back! Logged in successfully.");
 
-        // setTimeout(() => {
-        //   // navigating to previous page
-        //
-        // }, 1000);
         navigate(from, { replace: true });
       })
       .catch(() => {
-        // showing error login alert
         errorToast("Uh-oh! We couldn't log you in.");
       });
   };
 
   const handleLogInWithGoogle = () => {
     logInWithGoogle()
-      .then(() => {
-        // showing successful login alert
+      .then(async (result) => {
+        const user = result.user;
+
+        await addUser(user);
+
+        const userResult = await getUser(user);
+        setDbUser(userResult);
+        setDbUserInitialized(true);
+
         successToast("Welcome back! Logged in successfully.");
 
-        // setTimeout(() => {
-        //   // navigating to previous page
-        //   navigate(from, { replace: true });
-        // }, 1000);
         navigate(from, { replace: true });
       })
       .catch(() => {
-        // showing error login alert
         errorToast("Uh-oh! We couldn't log you in.");
       });
   };

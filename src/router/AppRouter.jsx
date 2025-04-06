@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from "react-router";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router";
 import MainLayout from "../layouts/MainLayout";
 import Homepage from "../pages/Homepage";
 import { scholarshipLoader } from "../components/homepage/FeaturedScholarship";
@@ -11,6 +11,11 @@ import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import PrivateRoute from "./PrivateRoute";
 import NotFoundPage from "../pages/NotFoundPage";
+import UserProfileScreen from "../components/userDashboardPage/UserProfileScreen";
+import UserDashboardLayout from "../layouts/UserDashboardLayout";
+import PaymentPage from "../pages/PaymentPage";
+import ApplicationPage from "../pages/ApplicationPage";
+import UserApplicationScreen from "../components/userDashboardPage/UserApplicationScreen";
 
 const router = createBrowserRouter([
   {
@@ -23,7 +28,7 @@ const router = createBrowserRouter([
         loader: scholarshipLoader,
       },
       {
-        path: "/scholarships/:id",
+        path: "scholarships/:id",
         element: (
           <PrivateRoute>
             <ScholarshipDetailsPage />
@@ -33,15 +38,57 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
       },
       {
-        path: "/all-scholarship",
+        path: "scholarships/:id/payment",
+        element: (
+          <PrivateRoute>
+            <PaymentPage />
+          </PrivateRoute>
+        ),
+        loader: scholarshipDetailsLoader,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "scholarships/:id/apply",
+        element: (
+          <PrivateRoute>
+            <ApplicationPage />
+          </PrivateRoute>
+        ),
+        loader: scholarshipDetailsLoader,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "all-scholarship",
         element: <AllScholarshipPage />,
       },
       {
-        path: "/login",
+        path: "user-dashboard",
+        element: (
+          <PrivateRoute>
+            <UserDashboardLayout />
+          </PrivateRoute>
+        ),
+        children: [
+          {
+            index: true,
+            element: <Navigate to="profile" replace />,
+          },
+          {
+            path: "profile",
+            element: <UserProfileScreen />,
+          },
+          {
+            path: "application",
+            element: <UserApplicationScreen />,
+          },
+        ],
+      },
+      {
+        path: "login",
         element: <LoginPage />,
       },
       {
-        path: "/register",
+        path: "register",
         element: <RegisterPage />,
       },
       {

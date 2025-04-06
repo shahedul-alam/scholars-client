@@ -2,22 +2,24 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import banner from "../assets/login-page-banner.JPG";
 import useAuth from "../hooks/useAuth";
+import { addUser, getUser } from "../utilities/utilities";
 // import { Helmet } from "react-helmet-async";
 
 const RegisterPage = () => {
   const {
+    setDbUser,
+    setDbUserInitialized,
     createNewUser,
     updateUserProfile,
     logInWithGoogle,
     successToast,
     errorToast,
   } = useAuth();
+  const [notValid, setNotValid] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const [notValid, setNotValid] = useState(false);
-  const regex = /^(?=.*[A-Z])(?=.*[a-z]).{6,}$/;
-
   const from = location.state || "/";
+  const regex = /^(?=.*[A-Z])(?=.*[a-z]).{6,}$/;
 
   const handleCreateNewUser = (e) => {
     e.preventDefault();
@@ -34,25 +36,29 @@ const RegisterPage = () => {
 
       createNewUser(email, password)
         .then(() => {
-          // after successful registration updating userInfo
           updateUserProfile({ displayName, photoURL })
-            .then(() => {
-              // showing successful register alert
+            .then(async () => {
+              const user = {
+                displayName,
+                email,
+                photoURL,
+              };
+
+              await addUser(user);
+
+              const result = await getUser(user);
+              setDbUser(result);
+              setDbUserInitialized(true);
+
               successToast("Congratulations! Registered successfully");
 
-              // setTimeout(() => {
-              //   // navigating to previous page
-              //   navigate(from, { replace: true });
-              // }, 1000);
               navigate(from, { replace: true });
             })
             .catch(() => {
-              // showing error register alert
               errorToast("Uh-oh! There was an issue creating your account.");
             });
         })
         .catch(() => {
-          // showing error register alert
           errorToast("Uh-oh! There was an issue creating your account.");
         });
     } else {
@@ -62,17 +68,20 @@ const RegisterPage = () => {
 
   const handleLogInWithGoogle = () => {
     logInWithGoogle()
-      .then(() => {
-        // showing successful register alert
+      .then(async (result) => {
+        const user = result.user;
+
+        await addUser(user);
+
+        const userResult = await getUser(user);
+        setDbUser(userResult);
+        setDbUserInitialized(true);
+
         successToast("Congratulations! Registered successfully");
 
-        setTimeout(() => {
-          // navigating to previous page
-          navigate(from, { replace: true });
-        }, 1000);
+        navigate(from, { replace: true });
       })
       .catch(() => {
-        // showing error register alert
         errorToast("Uh-oh! There was an issue creating your account.");
       });
   };
