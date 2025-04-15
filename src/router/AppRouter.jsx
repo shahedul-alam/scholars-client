@@ -14,7 +14,9 @@ import NotFoundPage from "../pages/NotFoundPage";
 import UserProfileScreen from "../components/userDashboardPage/UserProfileScreen";
 import UserDashboardLayout from "../layouts/UserDashboardLayout";
 import PaymentPage from "../pages/PaymentPage";
-import ApplicationPage from "../pages/ApplicationPage";
+import ApplicationPage, {
+  scholarshipAndUserLoader,
+} from "../pages/ApplicationPage";
 import UserApplicationScreen from "../components/userDashboardPage/UserApplicationScreen";
 
 const router = createBrowserRouter([
@@ -48,13 +50,13 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
       },
       {
-        path: "scholarships/:id/apply",
+        path: "/payments/:id/apply",
         element: (
           <PrivateRoute>
             <ApplicationPage />
           </PrivateRoute>
         ),
-        loader: scholarshipDetailsLoader,
+        loader: scholarshipAndUserLoader,
         errorElement: <ErrorPage />,
       },
       {

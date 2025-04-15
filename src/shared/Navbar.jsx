@@ -61,7 +61,9 @@ const Navbar = () => {
                   <NavLink
                     to={"/"}
                     className={({ isActive }) =>
-                      isActive && "bg-orange text-white font-semibold shadow"
+                      isActive
+                        ? "bg-orange text-white font-semibold shadow"
+                        : undefined
                     }
                   >
                     Home
@@ -71,7 +73,9 @@ const Navbar = () => {
                   <NavLink
                     to={"all-scholarship"}
                     className={({ isActive }) =>
-                      isActive && "bg-orange text-white font-semibold shadow"
+                      isActive
+                        ? "bg-orange text-white font-semibold shadow"
+                        : undefined
                     }
                   >
                     All Scholarship
@@ -81,7 +85,9 @@ const Navbar = () => {
                   <NavLink
                     to={dashboardRoute}
                     className={({ isActive }) =>
-                      isActive && "bg-orange text-white font-semibold shadow"
+                      isActive
+                        ? "bg-orange text-white font-semibold shadow"
+                        : undefined
                     }
                   >
                     Dashboard
@@ -99,7 +105,7 @@ const Navbar = () => {
                 <NavLink
                   to={"/"}
                   className={({ isActive }) =>
-                    isActive && "text-orange font-semibold"
+                    isActive ? "text-orange font-semibold" : undefined
                   }
                 >
                   Home
@@ -109,7 +115,7 @@ const Navbar = () => {
                 <NavLink
                   to={"all-scholarship"}
                   className={({ isActive }) =>
-                    isActive && "text-orange font-semibold"
+                    isActive ? "text-orange font-semibold" : undefined
                   }
                 >
                   All Scholarship
@@ -119,7 +125,7 @@ const Navbar = () => {
                 <NavLink
                   to={dashboardRoute}
                   className={({ isActive }) =>
-                    isActive && "text-orange font-semibold"
+                    isActive ? "text-orange font-semibold" : undefined
                   }
                 >
                   Dashboard

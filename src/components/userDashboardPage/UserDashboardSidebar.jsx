@@ -11,7 +11,7 @@ const UserDashboardSidebar = () => {
           <NavLink
             to={"profile"}
             className={({ isActive }) =>
-              isActive && "bg-orange text-white font-semibold shadow"
+              isActive ? "bg-orange text-white font-semibold shadow" : undefined
             }
           >
             <FaRegUser className="size-4" />
@@ -22,7 +22,7 @@ const UserDashboardSidebar = () => {
           <NavLink
             to={"application"}
             className={({ isActive }) =>
-              isActive && "bg-orange text-white font-semibold shadow"
+              isActive ? "bg-orange text-white font-semibold shadow" : undefined
             }
           >
             <FaWpforms className="size-4" />
@@ -33,7 +33,7 @@ const UserDashboardSidebar = () => {
           <NavLink
             to={"reviews"}
             className={({ isActive }) =>
-              isActive && "bg-orange text-white font-semibold shadow"
+              isActive ? "bg-orange text-white font-semibold shadow" : undefined
             }
           >
             <MdOutlineReviews className="size-4" />
