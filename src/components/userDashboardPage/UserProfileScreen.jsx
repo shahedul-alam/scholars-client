@@ -5,7 +5,7 @@ const UserProfileScreen = () => {
   const { displayName, email, emailVerified, photoURL } = user;
 
   return (
-    <div className="grow px-4 md:px-0">
+    <section className="grow px-4 md:px-0">
       <div className="flex gap-6 items-start p-5 rounded-xl border border-base-300">
         <div className="avatar">
           <div className="ring-orange ring-offset-base-100 w-32 rounded-full ring ring-offset-2">
@@ -22,7 +22,7 @@ const UserProfileScreen = () => {
           </p>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

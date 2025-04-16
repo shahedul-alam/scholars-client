@@ -34,9 +34,9 @@ const ApplicationForm = ({ data }) => {
       data.name = user.displayName;
       data.email = user.email;
       data.scholarshipId = scholarship._id;
+      data.status = "pending";
+      data.feedback = undefined;
       data.currentDate = new Date();
-
-      console.log(data);
 
       await axios.post("http://localhost:5000/submit-application", data);
 

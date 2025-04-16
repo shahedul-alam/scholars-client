@@ -15,3 +15,11 @@ export const getUser = async (user) => {
 
   return response.data;
 };
+
+export const cancelApplication = async (id) => {
+  const response = await axios.delete(
+    `http://localhost:5000/applications/${id}`
+  );
+
+  return response.data;
+};

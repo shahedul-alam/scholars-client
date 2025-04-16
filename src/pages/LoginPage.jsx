@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router";
 import banner from "../assets/login-page-banner.JPG";
 import useAuth from "../hooks/useAuth";
-import { addUser } from "../utilities/utilities";
+import { addUser, getUser } from "../utilities/utilities";
 
 // import { Helmet } from "react-helmet-async";
 
@@ -28,6 +28,7 @@ const LoginPage = () => {
 
     signinUser(email, password)
       .then(async () => {
+        console.log(1);
         const result = await getUser({ email });
         setDbUser(result);
         setDbUserInitialized(true);
@@ -36,7 +37,7 @@ const LoginPage = () => {
 
         navigate(from, { replace: true });
       })
-      .catch(() => {
+      .catch((error) => {
         errorToast("Uh-oh! We couldn't log you in.");
       });
   };

@@ -1,7 +1,9 @@
-import { Link, NavLink, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import useAuth from "../hooks/useAuth";
+import { useState } from "react";
 
 const Navbar = () => {
+  const [dashboardRoute, setDashboardRoute] = useState("user-dashboard");
   const { user, dbUser, signoutUser, successToast, errorToast } = useAuth();
   const navigate = useNavigate();
 
@@ -16,14 +18,11 @@ const Navbar = () => {
       });
   };
 
-  let dashboardRoute;
-  if (dbUser?.role) {
-    if (dbUser.role === "user") {
-      dashboardRoute = "user-dashboard";
+  if (dbUser) {
+    if (dbUser.role === "admin") {
+      dashboardRoute = "admin-dashboard";
     } else if (dbUser.role === "moderator") {
       dashboardRoute = "moderator-dashboard";
-    } else {
-      dashboardRoute = "admin-dashboard";
     }
   }
 
@@ -58,40 +57,13 @@ const Navbar = () => {
                 className="menu menu-sm rounded-box dropdown-content bg-base-100  z-[1] mt-3 w-52 p-2 shadow"
               >
                 <li>
-                  <NavLink
-                    to={"/"}
-                    className={({ isActive }) =>
-                      isActive
-                        ? "bg-orange text-white font-semibold shadow"
-                        : undefined
-                    }
-                  >
-                    Home
-                  </NavLink>
+                  <Link to={"/"}>Home</Link>
                 </li>
                 <li>
-                  <NavLink
-                    to={"all-scholarship"}
-                    className={({ isActive }) =>
-                      isActive
-                        ? "bg-orange text-white font-semibold shadow"
-                        : undefined
-                    }
-                  >
-                    All Scholarship
-                  </NavLink>
+                  <Link to={"all-scholarship"}>All Scholarship</Link>
                 </li>
                 <li>
-                  <NavLink
-                    to={dashboardRoute}
-                    className={({ isActive }) =>
-                      isActive
-                        ? "bg-orange text-white font-semibold shadow"
-                        : undefined
-                    }
-                  >
-                    Dashboard
-                  </NavLink>
+                  <Link to={dashboardRoute}>Dashboard</Link>
                 </li>
               </ul>
             </div>
@@ -102,34 +74,13 @@ const Navbar = () => {
           <div className="navbar-center hidden lg:flex">
             <ul className="menu menu-horizontal px-1">
               <li>
-                <NavLink
-                  to={"/"}
-                  className={({ isActive }) =>
-                    isActive ? "text-orange font-semibold" : undefined
-                  }
-                >
-                  Home
-                </NavLink>
+                <Link to={"/"}>Home</Link>
               </li>
               <li>
-                <NavLink
-                  to={"all-scholarship"}
-                  className={({ isActive }) =>
-                    isActive ? "text-orange font-semibold" : undefined
-                  }
-                >
-                  All Scholarship
-                </NavLink>
+                <Link to={"all-scholarship"}>All Scholarship</Link>
               </li>
               <li>
-                <NavLink
-                  to={dashboardRoute}
-                  className={({ isActive }) =>
-                    isActive ? "text-orange font-semibold" : undefined
-                  }
-                >
-                  Dashboard
-                </NavLink>
+                <Link to={dashboardRoute}>Dashboard</Link>
               </li>
             </ul>
           </div>
