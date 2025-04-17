@@ -18,6 +18,7 @@ import ApplicationPage, {
   scholarshipAndUserLoader,
 } from "../pages/ApplicationPage";
 import UserApplicationScreen from "../components/userDashboardPage/UserApplicationScreen";
+import UpdateApplicationPage, { applicationLoader } from "../pages/UpdateApplicationPage";
 
 const router = createBrowserRouter([
   {
@@ -57,6 +58,16 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
         loader: scholarshipAndUserLoader,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/applications/:id/update",
+        element: (
+          <PrivateRoute>
+            <UpdateApplicationPage />
+          </PrivateRoute>
+        ),
+        loader: applicationLoader,
         errorElement: <ErrorPage />,
       },
       {

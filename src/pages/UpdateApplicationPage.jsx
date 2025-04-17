@@ -1,23 +1,23 @@
 import axios from "axios";
 import { useLoaderData } from "react-router";
-import ApplicationForm from "../components/applicationPage/ApplicationForm";
+import UpdateApplicationForm from "../components/updateApplicationPage/UpdateApplicationForm";
 
-const ApplicationPage = () => {
+const UpdateApplicationPage = () => {
   const data = useLoaderData();
-
+  
   return (
     <main>
-      <ApplicationForm data={data} />
+      <UpdateApplicationForm data={data} />
     </main>
   );
 };
 
-export default ApplicationPage;
+export default UpdateApplicationPage;
 
-export const scholarshipAndUserLoader = async ({ params }) => {
+export const applicationLoader = async ({ params }) => {
   try {
     const result = await axios.get(
-      `http://localhost:5000/scholarship-user?paymentId=${params.id}`
+      `http://localhost:5000/applications/${params.id}`
     );
 
     return result.data.data;

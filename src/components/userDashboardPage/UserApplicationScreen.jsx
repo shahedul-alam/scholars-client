@@ -24,26 +24,26 @@ const UserApplicationScreen = () => {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, cancel it!"
+      confirmButtonText: "Yes, cancel it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
           const res = await cancelApplication(id);
           successToast(res.message);
           refetch();
-    
+
           Swal.fire({
             title: "Canceled!",
             text: "Your application has been canceled.",
-            icon: "success"
+            icon: "success",
           });
         } catch (error) {
-          errorToast(error.response.message);
+          errorToast(error.response.data.message);
         }
       }
     });
   };
-  
+
   if (isLoading) {
     return <Loading />;
   }
@@ -67,7 +67,11 @@ const UserApplicationScreen = () => {
         </thead>
         <tbody className="font-hind">
           {data?.map((app) => (
-            <ApplicationRows key={app._id} app={app} handleCancelApplication={handleCancelApplication} />
+            <ApplicationRows
+              key={app._id}
+              app={app}
+              handleCancelApplication={handleCancelApplication}
+            />
           ))}
         </tbody>
       </table>
@@ -79,6 +83,7 @@ export default UserApplicationScreen;
 
 const ApplicationRows = ({ app, handleCancelApplication }) => {
   const { scholarshipInfo } = app;
+
   return (
     <tr>
       <td>
@@ -97,9 +102,24 @@ const ApplicationRows = ({ app, handleCancelApplication }) => {
       <td>{app.status}</td>
       <td>
         <div className="space-y-2">
-          <Link to={`/scholarships/${app.scholarshipId}`} className="btn btn-info text-white w-full">Details</Link>
-          <button className="btn btn-primary text-white w-full">Edit</button>
-          <button className="btn btn-warning text-white w-full" onClick={() => handleCancelApplication(app._id)}>Cancel</button>
+          <Link
+            to={`/scholarships/${app.scholarshipId}`}
+            className="btn btn-info text-white w-full"
+          >
+            Details
+          </Link>
+          <Link
+            to={`/applications/${app._id}/update`}
+            className="btn btn-primary text-white w-full"
+          >
+            Edit
+          </Link>
+          <button
+            className="btn btn-warning text-white w-full"
+            onClick={() => handleCancelApplication(app._id)}
+          >
+            Cancel
+          </button>
         </div>
       </td>
       <td>

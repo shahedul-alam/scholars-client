@@ -20,9 +20,9 @@ const Navbar = () => {
 
   if (dbUser) {
     if (dbUser.role === "admin") {
-      dashboardRoute = "admin-dashboard";
+      setDashboardRoute("admin-dashboard");
     } else if (dbUser.role === "moderator") {
-      dashboardRoute = "moderator-dashboard";
+      setDashboardRoute("moderator-dashboard");
     }
   }
 
