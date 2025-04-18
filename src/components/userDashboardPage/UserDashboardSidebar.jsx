@@ -20,13 +20,13 @@ const UserDashboardSidebar = () => {
         </li>
         <li>
           <NavLink
-            to={"application"}
+            to={"applications"}
             className={({ isActive }) =>
               isActive ? "bg-orange text-white font-semibold shadow" : undefined
             }
           >
             <FaWpforms className="size-4" />
-            Application
+            Applications
           </NavLink>
         </li>
         <li>

@@ -12,6 +12,7 @@ const ReviewCard = ({ data }) => {
     ratingPoint,
   } = data;
 
+  const formattedDate = new Date(reviewDate).toLocaleDateString("en-GB");
   return (
     <div className="keen-slider__slide">
       <div className="p-5 bg-base-200 rounded-xl">
@@ -30,7 +31,7 @@ const ReviewCard = ({ data }) => {
               allowFraction
               readonly
             />
-            <p className="text-sm font-hind">{reviewDate}</p>
+            <p className="text-sm font-hind">{formattedDate}</p>
           </div>
         </div>
         <p className="font-hind">{reviewerComments}</p>

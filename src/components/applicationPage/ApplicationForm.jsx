@@ -82,7 +82,7 @@ const ApplicationForm = ({ data }) => {
       );
 
       successToast("Your application has been submitted successfully!");
-      navigate("/user-dashboard/application", { replace: true });
+      navigate("/user-dashboard/applications", { replace: true });
     } catch (error) {
       console.error("Application submission error:", error);
       errorToast(

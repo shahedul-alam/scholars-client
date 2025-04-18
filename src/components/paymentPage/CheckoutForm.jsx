@@ -96,7 +96,7 @@ const CheckoutForm = ({ data }) => {
         successToast("Your payment was successful!");
 
         axios.post("http://localhost:5000/payment", paymentDetails)
-        .then((res) => navigate(`/payments/${paymentIntent.id}/apply`));
+        .then((res) => navigate(`/applications/${paymentIntent.id}/apply`));
       }
     }
   };

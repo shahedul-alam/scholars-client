@@ -19,6 +19,7 @@ import ApplicationPage, {
 } from "../pages/ApplicationPage";
 import UserApplicationScreen from "../components/userDashboardPage/UserApplicationScreen";
 import UpdateApplicationPage, { applicationLoader } from "../pages/UpdateApplicationPage";
+import UserReviewsScreen from "../components/userDashboardPage/UserReviewsScreen";
 
 const router = createBrowserRouter([
   {
@@ -51,7 +52,7 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
       },
       {
-        path: "/payments/:id/apply",
+        path: "/applications/:id/apply",
         element: (
           <PrivateRoute>
             <ApplicationPage />
@@ -91,8 +92,12 @@ const router = createBrowserRouter([
             element: <UserProfileScreen />,
           },
           {
-            path: "application",
+            path: "applications",
             element: <UserApplicationScreen />,
+          },
+          {
+            path: "reviews",
+            element: <UserReviewsScreen />,
           },
         ],
       },

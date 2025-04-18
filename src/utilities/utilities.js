@@ -8,7 +8,7 @@ export const addUser = async (data) => {
 
 export const getUser = async (user) => {
   const { email } = user;
-  
+
   const response = await axios.get(
     `http://localhost:5000/get-user?email=${email}`
   );
@@ -23,3 +23,11 @@ export const cancelApplication = async (id) => {
 
   return response.data;
 };
+
+export const postReview = async (reviewDetails) => {
+  const response = await axios.post(`http://localhost:5000/review`, reviewDetails);
+
+  return response.data;
+};
+
+
