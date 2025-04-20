@@ -30,4 +30,12 @@ export const postReview = async (reviewDetails) => {
   return response.data;
 };
 
+export const deleteReview = async (id) => {
+  const response = await axios.delete(
+    `http://localhost:5000/review/?applicationId=${id}`
+  );
+
+  return response.data;
+};
+
 

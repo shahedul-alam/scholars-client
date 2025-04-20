@@ -10,7 +10,7 @@ const ScholarshipDetailsPage = () => {
   return (
     <main>
       <ScholarshipDetails data={data} />
-      <UserReviews data={data} />
+      <UserReviews data={data.reviews} />
       <Frequently />
     </main>
   );

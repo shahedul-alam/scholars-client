@@ -52,11 +52,35 @@ const UserReviews = ({ data }) => {
     },
   });
 
+  if (!data?.length) {
+    return (
+      <section className="container mx-auto mb-12 md:mb-16">
+        <div className="mb-8">
+          <h2 className="text-4xl font-bold font-montserrat text-center mb-4">
+            No Reviews Yet – Be the First to Share!
+          </h2>
+          <p className="w-4/5 mx-auto text-center font-hind text-lg">
+            This scholarship is waiting for its first review—share your
+            experience and help future applicants!
+          </p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="container mx-auto mb-12 md:mb-16">
+      <div className="mb-8">
+        <h2 className="text-4xl font-bold font-montserrat text-center mb-4">
+          Scholarship Stories
+        </h2>
+        <p className="w-4/5 mx-auto text-center font-hind text-lg">
+          See What Others Are Saying About Their Scholarship Journey!
+        </p>
+      </div>
       <div className="px-4 md:px-0">
         <div ref={sliderRef} className="keen-slider">
-          {data.reviews.map((item, index) => (
+          {data.map((item, index) => (
             <ReviewCard key={index} data={item} />
           ))}
         </div>
