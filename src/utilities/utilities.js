@@ -25,7 +25,10 @@ export const cancelApplication = async (id) => {
 };
 
 export const postReview = async (reviewDetails) => {
-  const response = await axios.post(`http://localhost:5000/review`, reviewDetails);
+  const response = await axios.post(
+    `http://localhost:5000/review`,
+    reviewDetails
+  );
 
   return response.data;
 };
@@ -38,4 +41,11 @@ export const deleteReview = async (id) => {
   return response.data;
 };
 
+export const updateReview = async (id, updatedReviewInfo) => {
+  const response = await axios.patch(
+    `http://localhost:5000/review/?applicationId=${id}`,
+    updatedReviewInfo
+  );
 
+  return response.data;
+};

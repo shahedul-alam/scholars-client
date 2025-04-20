@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 import useAuth from "../../hooks/useAuth";
 import Loading from "../../shared/Loading";
 import { cancelApplication, postReview } from "../../utilities/utilities";
+import EmptyState from "../../shared/EmptyState";
 
 // API request with proper error handling
 const fetchAllApplications = async (email) => {
@@ -201,9 +202,17 @@ const UserApplicationScreen = () => {
     queryKey: ["applications", user?.email],
     queryFn: () => fetchAllApplications(user?.email),
     staleTime: 30000,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
     enabled: !!user?.email, // Only run query if we have user email
+    retry: 1,
   });
+
+  useEffect(() => {
+    // Only refetch if we have a user email
+    if (user?.email) {
+      refetch();
+    }
+  }, [user?.email, refetch]);
 
   const handleCancelApplication = (id) => {
     Swal.fire({
@@ -278,22 +287,17 @@ const UserApplicationScreen = () => {
 
   if (!data?.length) {
     return (
-      <div className="grow flex flex-col items-center justify-center p-4">
-        <h2 className="text-2xl font-montserrat font-bold mb-4">
-          No Applications Found
-        </h2>
-        <p className="font-hind mb-6">
-          You haven't applied to any scholarships yet.
-        </p>
-        <Link to="/all-scholarship" className="btn btn-primary">
-          Browse Scholarships
-        </Link>
-      </div>
+      <EmptyState
+        title="No Applications Found"
+        message="You haven't applied to any scholarships yet."
+        actionLabel="Browse Scholarships"
+        actionLink="/all-scholarship"
+      />
     );
   }
 
   return (
-    <section className="overflow-x-auto grow px-4 md:px-0">
+    <section className="overflow-x-auto grow p-4">
       <h2 className="text-2xl font-montserrat font-bold mb-6">
         Your Applications
       </h2>
