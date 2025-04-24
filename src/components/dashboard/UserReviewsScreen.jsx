@@ -1,23 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState, useCallback, useEffect } from "react";
 import { Link } from "react-router";
-import axios from "axios";
 import Swal from "sweetalert2";
 import { Rating } from "react-simple-star-rating";
-
 import useAuth from "../../hooks/useAuth";
 import Loading from "../../shared/Loading";
 import { deleteReview, updateReview } from "../../utilities/utilities";
 import EmptyState from "../../shared/EmptyState";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import ErrorState from "../../shared/ErrorState";
 
 // API request with proper error handling
-const fetchAllUserReviews = async (email) => {
+const fetchAllUserReviews = async (email, axiosSecure) => {
   if (!email) throw new Error("Email is required to fetch reviews");
-  
+
   try {
-    const response = await axios.get(
-      `http://localhost:5000/reviews?email=${email}`
-    );
+    const response = await axiosSecure.get(`/reviews?email=${email}`);
     return response.data.data;
   } catch (error) {
     if (error.response) {
@@ -35,25 +33,26 @@ const fetchAllUserReviews = async (email) => {
 };
 
 // Review modal component for updating reviews
-const ReviewModal = ({ 
-  modalId, 
-  universityName, 
-  initialRating, 
-  initialComment, 
-  onClose, 
-  onUpdate 
+const ReviewModal = ({
+  modalId,
+  universityName,
+  initialRating,
+  initialComment,
+  onClose,
+  onUpdate,
 }) => {
   const [rating, setRating] = useState(initialRating);
   const [reviewComment, setReviewComment] = useState(initialComment);
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
     onUpdate(rating, reviewComment);
   };
-  
-  const isUnchanged = rating === initialRating && reviewComment === initialComment;
+
+  const isUnchanged =
+    rating === initialRating && reviewComment === initialComment;
   const isValid = rating > 0 && reviewComment.trim().length > 0;
-  
+
   return (
     <dialog id={modalId} className="modal">
       <div className="modal-box max-w-md">
@@ -63,7 +62,10 @@ const ReviewModal = ({
         <form method="dialog" className="w-full" onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div className="space-y-2">
-              <label htmlFor={`rating-${modalId}`} className="font-hind font-medium block">
+              <label
+                htmlFor={`rating-${modalId}`}
+                className="font-hind font-medium block"
+              >
                 Rate Your Experience
               </label>
               <Rating
@@ -76,9 +78,12 @@ const ReviewModal = ({
                 aria-label="Rating"
               />
             </div>
-            
+
             <div className="space-y-2">
-              <label htmlFor={`comment-${modalId}`} className="font-hind font-medium block">
+              <label
+                htmlFor={`comment-${modalId}`}
+                className="font-hind font-medium block"
+              >
                 Review Your Experience
               </label>
               <textarea
@@ -91,7 +96,7 @@ const ReviewModal = ({
               ></textarea>
             </div>
           </div>
-          
+
           <div className="flex justify-end gap-3 mt-6">
             <button
               type="button"
@@ -135,7 +140,7 @@ const ReviewRow = ({
     ratingPoint,
     reviewDate,
   } = review;
-  
+
   const modalId = `modal-${applicationId}`;
   const formattedDate = new Date(reviewDate).toLocaleDateString("en-GB", {
     year: "numeric",
@@ -185,8 +190,13 @@ const ReviewRow = ({
       <td>
         <div className="flex items-center">
           <span className="font-medium mr-1">{ratingPoint}</span>
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-yellow-500 inline" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-4 w-4 text-yellow-500 inline"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
           </svg>
         </div>
       </td>
@@ -228,23 +238,24 @@ const ReviewRow = ({
 
 const UserReviewsScreen = () => {
   const { user, successToast, errorToast } = useAuth();
-  
+  const axiosSecure = useAxiosSecure();
+
   // All hooks must be called unconditionally at the top level
-  const { 
-    data = [], 
-    isLoading, 
+  const {
+    data = [],
+    isLoading,
     isError,
     error,
-    refetch 
+    refetch,
   } = useQuery({
     queryKey: ["user-reviews", user?.email],
-    queryFn: () => fetchAllUserReviews(user?.email),
+    queryFn: () => fetchAllUserReviews(user?.email, axiosSecure),
     staleTime: 30000,
     refetchOnWindowFocus: true,
     enabled: !!user?.email,
     retry: 1,
   });
-  
+
   // useEffect to handle initial data loading
   useEffect(() => {
     // Only refetch if we have a user email
@@ -253,43 +264,49 @@ const UserReviewsScreen = () => {
     }
   }, [user?.email, refetch]);
 
-  const handleDeleteReview = useCallback((id) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "This action cannot be undone.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it",
-      cancelButtonText: "Cancel",
-      focusCancel: true,
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          const res = await deleteReview(id);
-          successToast(res.message || "Review deleted successfully");
-          refetch();
-        } catch (error) {
-          const errorMessage =
-            error?.response?.data?.message ||
-            error.message ||
-            "Failed to delete review";
-          errorToast(errorMessage);
+  const handleDeleteReview = useCallback(
+    (id) => {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "This action cannot be undone.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it",
+        cancelButtonText: "Cancel",
+        focusCancel: true,
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            const res = await deleteReview(id);
+            successToast(res.message || "Review deleted successfully");
+            refetch();
+          } catch (error) {
+            const errorMessage =
+              error?.response?.data?.message ||
+              error.message ||
+              "Failed to delete review";
+            errorToast(errorMessage);
+          }
         }
-      }
-    });
-  }, [successToast, errorToast, refetch]);
+      });
+    },
+    [successToast, errorToast, refetch]
+  );
 
-  const handleUpdateReview = useCallback(async (id, updatedData) => {
-    try {
-      const res = await updateReview(id, updatedData);
-      refetch();
-      return res;
-    } catch (error) {
-      throw error;
-    }
-  }, [refetch]);
+  const handleUpdateReview = useCallback(
+    async (id, updatedData) => {
+      try {
+        const res = await updateReview(id, updatedData);
+        refetch();
+        return res;
+      } catch (error) {
+        throw error;
+      }
+    },
+    [refetch]
+  );
 
   // Render loading state if necessary
   if (isLoading) {
@@ -299,16 +316,12 @@ const UserReviewsScreen = () => {
   // Render error state if necessary
   if (isError) {
     return (
-      <div className="grow flex flex-col items-center justify-center p-4">
-        <h2 className="text-xl font-montserrat font-bold mb-2 text-error">Error Loading Reviews</h2>
-        <p className="font-hind">{error.message}</p>
-        <button 
-          onClick={() => refetch()} 
-          className="btn btn-primary mt-4"
-        >
-          Try Again
-        </button>
-      </div>
+      <ErrorState
+        title="Error Loading Reviews"
+        message={error.message}
+        actionLabel="Try again"
+        action={refetch}
+      />
     );
   }
 

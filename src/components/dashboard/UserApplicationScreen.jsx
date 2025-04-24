@@ -1,21 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router"; 
+import { Link, useNavigate } from "react-router";
 import { Rating } from "react-simple-star-rating";
 import Swal from "sweetalert2";
-
 import useAuth from "../../hooks/useAuth";
 import Loading from "../../shared/Loading";
 import { cancelApplication, postReview } from "../../utilities/utilities";
 import EmptyState from "../../shared/EmptyState";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import ErrorState from "../../shared/ErrorState";
 
-// API request with proper error handling
-const fetchAllApplications = async (email) => {
+const fetchAllApplications = async (email, axiosSecure) => {
+  if (!email) throw new Error("Email is required to fetch applications");
+
   try {
-    const response = await axios.get(
-      `http://localhost:5000/applications?email=${email}`
-    );
+    const response = await axiosSecure.get(`/applications?email=${email}`);
     return response.data.data;
   } catch (error) {
     if (error.response) {
@@ -197,10 +196,17 @@ const ApplicationRows = ({
 const UserApplicationScreen = () => {
   const { user, successToast, errorToast } = useAuth();
   const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();
 
-  const { data, isLoading, refetch } = useQuery({
+  const {
+    data = [],
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useQuery({
     queryKey: ["applications", user?.email],
-    queryFn: () => fetchAllApplications(user?.email),
+    queryFn: () => fetchAllApplications(user?.email, axiosSecure),
     staleTime: 30000,
     refetchOnWindowFocus: true,
     enabled: !!user?.email, // Only run query if we have user email
@@ -250,7 +256,7 @@ const UserApplicationScreen = () => {
     if (status === "pending") {
       navigate(`/applications/${id}/update`);
     } else {
-      errorToast("Cannot edit. The application is processing."); // Fixed typo
+      errorToast("Cannot edit. The application is processing.");
     }
   };
 
@@ -283,6 +289,17 @@ const UserApplicationScreen = () => {
 
   if (isLoading) {
     return <Loading />;
+  }
+
+  if (isError) {
+    return (
+      <ErrorState
+        title="Error Loading Applications"
+        message={error.message}
+        actionLabel="Try again"
+        action={refetch}
+      />
+    );
   }
 
   if (!data?.length) {

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { FeaturedScholarshipCards } from "../homepage/FeaturedScholarship";
-import axios from "axios";
+import { axiosPublic } from "../../hooks/useAxiosSecure";
 import Loading from "../../shared/Loading";
 import { useState } from "react";
 import NoData from "../../shared/NoData";
@@ -28,7 +28,12 @@ const AllScholarship = () => {
           className="input input-bordered w-full placeholder:font-hind"
           onChange={(e) => setSearch(e.target.value)}
         />
-        <button className="btn bg-orange text-white font-hind" onClick={() => setQuery(search)}>Search</button>
+        <button
+          className="btn bg-orange text-white font-hind"
+          onClick={() => setQuery(search)}
+        >
+          Search
+        </button>
       </div>
 
       {isLoading ? (
@@ -39,7 +44,9 @@ const AllScholarship = () => {
             <FeaturedScholarshipCards key={item._id} data={item} />
           ))}
         </div>
-      ) : <NoData /> }
+      ) : (
+        <NoData />
+      )}
     </section>
   );
 };
@@ -47,7 +54,7 @@ const AllScholarship = () => {
 export default AllScholarship;
 
 const fetchAllScholarship = async (query) => {
-  const response = await axios.get("http://localhost:5000/scholarships", {
+  const response = await axiosPublic.get("/scholarships", {
     params: { query: query || undefined },
   });
 

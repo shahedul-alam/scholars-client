@@ -1,5 +1,5 @@
-import axios from "axios";
 import { Link, useLoaderData } from "react-router";
+import { axiosPublic } from "../../hooks/useAxiosSecure";
 
 const calAvgRating = (data) => {
   let sum = 0;
@@ -207,7 +207,7 @@ const FeaturedScholarship = () => {
 export default FeaturedScholarship;
 
 export const scholarshipLoader = async () => {
-  const result = await axios.get("http://localhost:5000/featured-scholarships");
+  const result = await axiosPublic.get("/featured-scholarships");
 
   return result.data;
 };

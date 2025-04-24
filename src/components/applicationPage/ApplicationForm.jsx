@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { axiosPublic } from "../../hooks/useAxiosSecure";
 
 const ApplicationForm = ({ data }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -76,10 +77,7 @@ const ApplicationForm = ({ data }) => {
       };
 
       // Submit application
-      await axios.post(
-        "http://localhost:5000/submit-application",
-        finalApplicationData
-      );
+      await axiosPublic.post("/submit-application", finalApplicationData);
 
       successToast("Your application has been submitted successfully!");
       navigate("/user-dashboard/applications", { replace: true });

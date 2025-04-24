@@ -1,9 +1,8 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useEffect, useState } from "react";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useAxiosSecure, { axiosPublic } from "../../hooks/useAxiosSecure";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate, useParams } from "react-router";
-import axios from "axios";
 
 const CARD_ELEMENT_OPTIONS = {
   style: {
@@ -27,7 +26,7 @@ const CheckoutForm = ({ data }) => {
   const [clientSecret, setClientSecret] = useState("");
   const { user, dbUser, successToast, errorToast } = useAuth();
   const navigate = useNavigate();
-  const {id} = useParams();
+  const { id } = useParams();
   const stripe = useStripe();
   const elements = useElements();
   const axiosSecure = useAxiosSecure();
@@ -92,11 +91,12 @@ const CheckoutForm = ({ data }) => {
           scholarshipId: id,
           userId: dbUser._id,
         };
-        
+
         successToast("Your payment was successful!");
 
-        axios.post("http://localhost:5000/payment", paymentDetails)
-        .then((res) => navigate(`/applications/${paymentIntent.id}/apply`));
+        axiosPublic
+          .post("/payment", paymentDetails)
+          .then((res) => navigate(`/applications/${paymentIntent.id}/apply`));
       }
     }
   };

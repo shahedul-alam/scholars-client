@@ -1,6 +1,9 @@
 import { createContext, useEffect, useState } from "react";
 import { auth } from "../firebase/firebase.config";
 import { Bounce, toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { axiosInstance } from "../hooks/useAxiosSecure";
+import { getUser } from "../utilities/utilities";
 import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
@@ -11,9 +14,6 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
-import "react-toastify/dist/ReactToastify.css";
-import { axiosInstance } from "../hooks/useAxiosSecure";
-import { getUser } from "../utilities/utilities";
 
 export const AuthContext = createContext();
 
@@ -30,21 +30,17 @@ const AuthContextProvider = ({ children }) => {
       if (currentUser && !dbUserInitialized) {
         const result = await getUser(currentUser);
         setDbUser(result);
-      } else if (!currentUser) {
-        setDbUser(null);
-      }
-      
-      // if (currentUser) {
-      //     axiosInstance
-      //       .post("/get-token", { email: currentUser.email })
-      //       .then((res) => setLoading(false));
-      //   } else {
-      //     axiosInstance
-      //       .post("/remove-token", {})
-      //       .then((res) => setLoading(false));
-      // }
 
-      setLoading(false);
+        axiosInstance
+          .post("/get-token", { email: currentUser.email })
+          .then((res) => setLoading(false));
+      } else {
+        setDbUser(null);
+
+        axiosInstance
+          .post("/remove-token", {})
+          .then((res) => setLoading(false));
+      }
     });
 
     return () => {

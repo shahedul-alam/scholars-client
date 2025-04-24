@@ -28,7 +28,6 @@ const LoginPage = () => {
 
     signinUser(email, password)
       .then(async () => {
-        console.log(1);
         const result = await getUser({ email });
         setDbUser(result);
         setDbUserInitialized(true);

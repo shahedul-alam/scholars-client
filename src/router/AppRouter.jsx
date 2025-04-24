@@ -11,15 +11,22 @@ import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import PrivateRoute from "./PrivateRoute";
 import NotFoundPage from "../pages/NotFoundPage";
-import UserProfileScreen from "../components/userDashboardPage/UserProfileScreen";
-import UserDashboardLayout from "../layouts/UserDashboardLayout";
 import PaymentPage from "../pages/PaymentPage";
 import ApplicationPage, {
   scholarshipAndUserLoader,
 } from "../pages/ApplicationPage";
-import UserApplicationScreen from "../components/userDashboardPage/UserApplicationScreen";
-import UpdateApplicationPage, { applicationLoader } from "../pages/UpdateApplicationPage";
-import UserReviewsScreen from "../components/userDashboardPage/UserReviewsScreen";
+import UserApplicationScreen from "../components/dashboard/UserApplicationScreen";
+import UpdateApplicationPage, {
+  applicationLoader,
+} from "../pages/UpdateApplicationPage";
+import UserReviewsScreen from "../components/dashboard/UserReviewsScreen";
+import DashboardLayout from "../layouts/DashboardLayout";
+import ProfileScreen from "../components/dashboard/ProfileScreen";
+import ModeratorRoute from "./ModeratorRoute";
+import ModeratorMangeScholarships from "../components/dashboard/ModeratorMangeScholarships";
+import ModeratorAllReviews from "../components/dashboard/ModeratorAllReviews";
+import ModeratorAllAppliedScholarships from "../components/dashboard/ModeratorAllAppliedScholarships";
+import ModeratorAddScholarship from "../components/dashboard/ModeratorAddScholarship";
 
 const router = createBrowserRouter([
   {
@@ -76,20 +83,22 @@ const router = createBrowserRouter([
         element: <AllScholarshipPage />,
       },
       {
-        path: "user-dashboard",
+        path: "dashboard",
         element: (
           <PrivateRoute>
-            <UserDashboardLayout />
+            <DashboardLayout />
           </PrivateRoute>
         ),
         children: [
+          // common routes
           {
             index: true,
             element: <Navigate to="profile" replace />,
           },
+          // user routes
           {
             path: "profile",
-            element: <UserProfileScreen />,
+            element: <ProfileScreen />,
           },
           {
             path: "applications",
@@ -98,6 +107,39 @@ const router = createBrowserRouter([
           {
             path: "reviews",
             element: <UserReviewsScreen />,
+          },
+          // moderator routes
+          {
+            path: "manage-scholarships",
+            element: (
+              <ModeratorRoute>
+                <ModeratorMangeScholarships />
+              </ModeratorRoute>
+            ),
+          },
+          {
+            path: "all-reviews",
+            element: (
+              <ModeratorRoute>
+                <ModeratorAllReviews />
+              </ModeratorRoute>
+            ),
+          },
+          {
+            path: "all-applied-scholarship",
+            element: (
+              <ModeratorRoute>
+                <ModeratorAllAppliedScholarships />
+              </ModeratorRoute>
+            ),
+          },
+          {
+            path: "add-scholarship",
+            element: (
+              <ModeratorRoute>
+                <ModeratorAddScholarship />
+              </ModeratorRoute>
+            ),
           },
         ],
       },

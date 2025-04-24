@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useLoaderData } from "react-router";
 import ApplicationForm from "../components/applicationPage/ApplicationForm";
+import { axiosPublic } from "../hooks/useAxiosSecure";
 
 const ApplicationPage = () => {
   const data = useLoaderData();
@@ -16,8 +16,8 @@ export default ApplicationPage;
 
 export const scholarshipAndUserLoader = async ({ params }) => {
   try {
-    const result = await axios.get(
-      `http://localhost:5000/scholarship-user?paymentId=${params.id}`
+    const result = await axiosPublic.get(
+      `/scholarship-user?paymentId=${params.id}`
     );
 
     return result.data.data;

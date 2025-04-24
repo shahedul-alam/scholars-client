@@ -1,10 +1,8 @@
-import { Link, useNavigate } from "react-router";
 import useAuth from "../hooks/useAuth";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router";
 
 const Navbar = () => {
-  const [dashboardRoute, setDashboardRoute] = useState("user-dashboard");
-  const { user, dbUser, signoutUser, successToast, errorToast } = useAuth();
+  const { user, signoutUser, successToast, errorToast } = useAuth();
   const navigate = useNavigate();
 
   const handleSignout = () => {
@@ -17,14 +15,6 @@ const Navbar = () => {
         errorToast("Uh-oh! We couldn't sign you out.");
       });
   };
-
-  if (dbUser) {
-    if (dbUser.role === "admin") {
-      setDashboardRoute("admin-dashboard");
-    } else if (dbUser.role === "moderator") {
-      setDashboardRoute("moderator-dashboard");
-    }
-  }
 
   return (
     <header>
@@ -63,7 +53,7 @@ const Navbar = () => {
                   <Link to={"all-scholarship"}>All Scholarship</Link>
                 </li>
                 <li>
-                  <Link to={dashboardRoute}>Dashboard</Link>
+                  <Link to={"dashboard"}>Dashboard</Link>
                 </li>
               </ul>
             </div>
@@ -80,7 +70,7 @@ const Navbar = () => {
                 <Link to={"all-scholarship"}>All Scholarship</Link>
               </li>
               <li>
-                <Link to={dashboardRoute}>Dashboard</Link>
+                <Link to={"dashboard"}>Dashboard</Link>
               </li>
             </ul>
           </div>

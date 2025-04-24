@@ -1,14 +1,14 @@
 import { Outlet } from "react-router";
-import UserDashboardSidebar from "../components/userDashboardPage/userDashboardSidebar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import DashboardSidebar from "../components/dashboard/DashboardSidebar";
 
-const UserDashboardLayout = () => {
+const DashboardLayout = () => {
   const queryClient = new QueryClient();
-  
+
   return (
     <main className="container mx-auto min-h-screen mb-12 md:mb-16">
       <div className="flex flex-col md:flex-row gap-4">
-        <UserDashboardSidebar />
+        <DashboardSidebar />
         <QueryClientProvider client={queryClient}>
           <Outlet />
         </QueryClientProvider>
@@ -17,4 +17,4 @@ const UserDashboardLayout = () => {
   );
 };
 
-export default UserDashboardLayout;
+export default DashboardLayout;

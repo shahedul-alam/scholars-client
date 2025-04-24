@@ -1,10 +1,10 @@
-import axios from "axios";
 import { useLoaderData } from "react-router";
 import UpdateApplicationForm from "../components/updateApplicationPage/UpdateApplicationForm";
+import { axiosPublic } from "../hooks/useAxiosSecure";
 
 const UpdateApplicationPage = () => {
   const data = useLoaderData();
-  
+
   return (
     <main>
       <UpdateApplicationForm data={data} />
@@ -16,9 +16,7 @@ export default UpdateApplicationPage;
 
 export const applicationLoader = async ({ params }) => {
   try {
-    const result = await axios.get(
-      `http://localhost:5000/applications/${params.id}`
-    );
+    const result = await axiosPublic.get(`/applications/${params.id}`);
 
     return result.data.data;
   } catch (error) {

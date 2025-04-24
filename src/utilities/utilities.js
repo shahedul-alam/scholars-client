@@ -1,7 +1,10 @@
-import axios from "axios";
+import { axiosPublic } from "../hooks/useAxiosSecure";
 
 export const addUser = async (data) => {
-  const response = await axios.post("http://localhost:5000/add-user", data);
+  const response = await axiosPublic.post(
+    "http://localhost:5000/add-user",
+    data
+  );
 
   return response.data;
 };
@@ -9,7 +12,7 @@ export const addUser = async (data) => {
 export const getUser = async (user) => {
   const { email } = user;
 
-  const response = await axios.get(
+  const response = await axiosPublic.get(
     `http://localhost:5000/get-user?email=${email}`
   );
 
@@ -17,7 +20,7 @@ export const getUser = async (user) => {
 };
 
 export const cancelApplication = async (id) => {
-  const response = await axios.delete(
+  const response = await axiosPublic.delete(
     `http://localhost:5000/applications/${id}`
   );
 
@@ -25,7 +28,7 @@ export const cancelApplication = async (id) => {
 };
 
 export const postReview = async (reviewDetails) => {
-  const response = await axios.post(
+  const response = await axiosPublic.post(
     `http://localhost:5000/review`,
     reviewDetails
   );
@@ -34,7 +37,7 @@ export const postReview = async (reviewDetails) => {
 };
 
 export const deleteReview = async (id) => {
-  const response = await axios.delete(
+  const response = await axiosPublic.delete(
     `http://localhost:5000/review/?applicationId=${id}`
   );
 
@@ -42,7 +45,7 @@ export const deleteReview = async (id) => {
 };
 
 export const updateReview = async (id, updatedReviewInfo) => {
-  const response = await axios.patch(
+  const response = await axiosPublic.patch(
     `http://localhost:5000/review/?applicationId=${id}`,
     updatedReviewInfo
   );

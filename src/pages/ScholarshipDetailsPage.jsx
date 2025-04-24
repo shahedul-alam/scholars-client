@@ -1,8 +1,8 @@
-import axios from "axios";
 import { useLoaderData } from "react-router";
 import ScholarshipDetails from "../components/scholarshipDetailsPage/ScholarshipDetails";
 import Frequently from "../components/homepage/Frequently";
 import UserReviews from "../components/scholarshipDetailsPage/UserReviews";
+import { axiosPublic } from "../hooks/useAxiosSecure";
 
 const ScholarshipDetailsPage = () => {
   const data = useLoaderData();
@@ -20,9 +20,7 @@ export default ScholarshipDetailsPage;
 
 export const scholarshipDetailsLoader = async ({ params }) => {
   try {
-    const result = await axios.get(
-      `http://localhost:5000/scholarship/${params.id}`
-    );
+    const result = await axiosPublic.get(`/scholarship/${params.id}`);
 
     return result.data.data;
   } catch (error) {

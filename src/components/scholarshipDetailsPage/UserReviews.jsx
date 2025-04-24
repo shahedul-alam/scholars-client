@@ -23,7 +23,7 @@ const ReviewCard = ({ data }) => {
             </div>
           </div>
           <div>
-            <h2 className="font-hind text-2xl font-semibold">{reviewerName}</h2>
+            <h2 className="font-hind text-xl font-semibold">{reviewerName}</h2>
             <Rating
               SVGclassName="inline"
               size={16}

@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import useAuth from "../../hooks/useAuth";
+import { axiosPublic } from "../../hooks/useAxiosSecure";
 
 const UpdateApplicationForm = ({ data }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -92,8 +93,8 @@ const UpdateApplicationForm = ({ data }) => {
         currentDate: new Date().toISOString(),
       };
 
-      await axios.patch(
-        `http://localhost:5000/update-application/${updatedData._id}`,
+      await axiosPublic.patch(
+        `/update-application/${updatedData._id}`,
         updatedData
       );
 
