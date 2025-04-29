@@ -340,7 +340,9 @@ const UserReviewsScreen = () => {
   // Render data
   return (
     <section className="overflow-x-auto grow p-4">
-      <h2 className="text-2xl font-montserrat font-bold mb-6">Your Reviews</h2>
+      <h2 className="text-2xl font-montserrat font-bold mb-6">
+        Your Reviews ({data.length})
+      </h2>
       <div className="overflow-x-auto rounded-lg border border-base-300">
         <table className="table w-full">
           <thead className="font-montserrat bg-base-200">

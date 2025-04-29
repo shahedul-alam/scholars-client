@@ -89,6 +89,7 @@ const router = createBrowserRouter([
             <DashboardLayout />
           </PrivateRoute>
         ),
+        errorElement: <ErrorPage />,
         children: [
           // common routes
           {

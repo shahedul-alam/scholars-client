@@ -316,7 +316,7 @@ const UserApplicationScreen = () => {
   return (
     <section className="overflow-x-auto grow p-4">
       <h2 className="text-2xl font-montserrat font-bold mb-6">
-        Your Applications
+        Your Applications ({data.length})
       </h2>
       <div className="overflow-x-auto">
         <table className="table w-full">
