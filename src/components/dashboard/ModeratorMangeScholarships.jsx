@@ -7,6 +7,7 @@ import Loading from "../../shared/Loading";
 import ErrorState from "../../shared/ErrorState";
 import EmptyState from "../../shared/EmptyState";
 import Swal from "sweetalert2";
+import ScholarshipUpdateModal from "./ScholarshipUpdateModal";
 
 const fetchAllScholarships = async (email, axiosSecure) => {
   if (!email) throw new Error("Email is required");
@@ -60,6 +61,7 @@ const ScholarshipRows = ({ scholarship, handleDeleteScholarship }) => {
     applicationFees,
     serviceCharge,
   } = scholarship;
+  const modalId = `modal-${_id}`;
 
   return (
     <tr>
@@ -85,9 +87,14 @@ const ScholarshipRows = ({ scholarship, handleDeleteScholarship }) => {
           <button
             className="btn btn-primary text-white w-full"
             aria-label={`Edit scholarship of ${universityName}`}
+            onClick={() => document.getElementById(modalId).showModal()}
           >
             Edit
           </button>
+
+          {/* scholarship update modal */}
+          <ScholarshipUpdateModal modalId={modalId} scholarship={scholarship} />
+
           <button
             className="btn btn-warning text-white w-full"
             aria-label={`Delete scholarship of ${universityName}`}

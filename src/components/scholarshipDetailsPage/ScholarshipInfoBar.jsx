@@ -19,6 +19,8 @@ const ScholarshipInfoBar = ({ data }) => {
     reviews,
   } = data;
 
+  const formattedPostDate = postDate?.split("T")[0];
+
   return (
     <div className="border border-blue rounded-lg md:w-2/5 h-fit">
       <div className="p-6 border-b border-blue">
@@ -53,7 +55,7 @@ const ScholarshipInfoBar = ({ data }) => {
           <MdOutlineDateRange className="text-2xl" />
           <div>
             <p className="text-lg font-medium">Post Date:</p>
-            <p className="text-blue">{postDate}</p>
+            <p className="text-blue">{formattedPostDate}</p>
           </div>
         </div>
         <div className="flex items-center gap-4">

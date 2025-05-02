@@ -80,7 +80,7 @@ const ApplicationForm = ({ data }) => {
       await axiosPublic.post("/submit-application", finalApplicationData);
 
       successToast("Your application has been submitted successfully!");
-      navigate("/user-dashboard/applications", { replace: true });
+      navigate("/dashboard/applications", { replace: true });
     } catch (error) {
       console.error("Application submission error:", error);
       errorToast(

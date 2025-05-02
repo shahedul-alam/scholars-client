@@ -99,7 +99,7 @@ const UpdateApplicationForm = ({ data }) => {
       );
 
       successToast("Application updated successfully!");
-      navigate("/user-dashboard/applications");
+      navigate("/dashboard/applications");
     } catch (err) {
       errorToast(
         err?.response?.data?.message || "Failed to update application"
