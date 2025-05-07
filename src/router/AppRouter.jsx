@@ -81,6 +81,7 @@ const router = createBrowserRouter([
       {
         path: "all-scholarship",
         element: <AllScholarshipPage />,
+        errorElement: <ErrorPage />,
       },
       {
         path: "dashboard",

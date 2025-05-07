@@ -80,7 +80,6 @@ const ScholarshipUpdateModal = ({ modalId, scholarship }) => {
   };
 
   const onSubmit = async (formData) => {
-    console.log(formData);
     try {
       setIsLoading(true);
       let photoURL = universityImageLogo;
@@ -89,7 +88,6 @@ const ScholarshipUpdateModal = ({ modalId, scholarship }) => {
       if (formData.photo?.[0]) {
         const imageFormData = new FormData();
         imageFormData.append("image", formData.photo[0]);
-        console.log("Uploading image:", imageFormData);
 
         try {
           const res = await axios.post(image_hosting_api, imageFormData, {

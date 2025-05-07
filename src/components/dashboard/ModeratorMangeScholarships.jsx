@@ -64,7 +64,7 @@ const ScholarshipRows = ({ scholarship, handleDeleteScholarship }) => {
   const modalId = `modal-${_id}`;
 
   return (
-    <tr>
+    <tr className="hover:bg-base-200">
       <td>
         <div>
           <div className="font-bold">{universityName}</div>
