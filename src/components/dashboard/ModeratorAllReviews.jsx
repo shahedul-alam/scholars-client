@@ -5,6 +5,7 @@ import ErrorState from "../../shared/ErrorState";
 import EmptyState from "../../shared/EmptyState";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
+import Swal from "sweetalert2";
 
 const fetchAllReviews = async (email, axiosSecure) => {
   if (!email) throw new Error("Email is required");
@@ -26,8 +27,31 @@ const fetchAllReviews = async (email, axiosSecure) => {
   }
 };
 
-const ReviewsRows = ({ review }) => {
+const deleteReview = async (applicationId, email, axiosSecure) => {
+  if (!email) throw new Error("Email is required");
+
+  if (!applicationId) throw new Error("Application ID is required");
+
+  try {
+    const response = await axiosSecure.delete(
+      `/reviews-moderator/${applicationId}?email=${email}`
+    );
+
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      const { status, data } = error.response;
+      if (status === 400 || status === 404) {
+        throw new Error(data.message);
+      }
+    }
+    throw new Error("Failed to delete review. Please try again later.");
+  }
+};
+
+const ReviewsRows = ({ review, handleDeleteReview }) => {
   const {
+    applicationId,
     universityName,
     reviewerName,
     reviewerImage,
@@ -69,7 +93,12 @@ const ReviewsRows = ({ review }) => {
       </td>
       <td>{reviewerComments}</td>
       <td>
-        <button className="btn btn-error text-white">Delete</button>
+        <button
+          className="btn btn-error text-white"
+          onClick={() => handleDeleteReview(applicationId)}
+        >
+          Delete
+        </button>
       </td>
     </tr>
   );
@@ -94,6 +123,8 @@ const ModeratorAllReviews = () => {
     retry: 1,
   });
 
+  console.log(data);
+
   useEffect(() => {
     // Only refetch if we have a user email
     if (dbUser?.role === "moderator") {
@@ -101,37 +132,41 @@ const ModeratorAllReviews = () => {
     }
   }, [dbUser?.role, refetch]);
 
-  // const handleDeleteScholarship = (id) => {
-  //   Swal.fire({
-  //     title: "Are you sure?",
-  //     text: "You won't be able to revert this!",
-  //     icon: "warning",
-  //     showCancelButton: true,
-  //     confirmButtonColor: "#3085d6",
-  //     cancelButtonColor: "#d33",
-  //     confirmButtonText: "Yes, delete it!",
-  //   }).then(async (result) => {
-  //     if (result.isConfirmed) {
-  //       try {
-  //         const res = await deleteScholarship(id, user?.email, axiosSecure);
-  //         successToast(res.message);
-  //         refetch();
+  const handleDeleteReview = (applicationId) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await deleteReview(
+            applicationId,
+            user?.email,
+            axiosSecure
+          );
+          successToast(res.message);
+          refetch();
 
-  //         Swal.fire({
-  //           title: "Deleted!",
-  //           text: "scholarship has been deleted.",
-  //           icon: "success",
-  //         });
-  //       } catch (error) {
-  //         const errorMessage =
-  //           error?.response?.data?.message ||
-  //           error.message ||
-  //           "Failed to delete scholarship";
-  //         errorToast(errorMessage);
-  //       }
-  //     }
-  //   });
-  // };
+          Swal.fire({
+            title: "Deleted!",
+            text: "review has been deleted.",
+            icon: "success",
+          });
+        } catch (error) {
+          const errorMessage =
+            error?.response?.data?.message ||
+            error.message ||
+            "Failed to delete review";
+          errorToast(errorMessage);
+        }
+      }
+    });
+  };
 
   if (isLoading) {
     return <Loading />;
@@ -180,7 +215,11 @@ const ModeratorAllReviews = () => {
           </thead>
           <tbody className="font-hind">
             {data.map((review, index) => (
-              <ReviewsRows key={index} review={review} />
+              <ReviewsRows
+                key={index}
+                review={review}
+                handleDeleteReview={handleDeleteReview}
+              />
             ))}
           </tbody>
         </table>
