@@ -1,5 +1,3 @@
-import { Link } from "react-router";
-
 const ApplicationDetailsModal = ({ detailsModalId, application }) => {
   const {
     phone,
@@ -158,6 +156,9 @@ const ApplicationDetailsModal = ({ detailsModalId, application }) => {
               </div>
               <div>
                 <strong>Application Fee:</strong> ${applicationFees}
+              </div>
+              <div>
+                <strong>Feedback:</strong> {feedback || "No feedback yet"}
               </div>
             </div>
 

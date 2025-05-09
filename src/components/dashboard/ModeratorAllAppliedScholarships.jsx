@@ -29,34 +29,25 @@ const fetchAllApplications = async (email, axiosSecure) => {
   }
 };
 
-const ApplicationRows = ({ application }) => {
+const ApplicationRows = ({ application, refetch }) => {
   const {
     _id,
-    phone,
-    gender,
     country,
     degree,
     ssc,
     hsc,
-    hasStudyGap,
     photoURL,
     name,
-    email,
     status,
-    currentDate,
     scholarshipInfo,
+    feedback,
   } = application;
 
-  const {
-    universityName,
-    universityImageLogo,
-    universityLocationAddress,
-    scholarshipCategory,
-  } = scholarshipInfo;
+  const { universityName, universityImageLogo, universityLocationAddress } =
+    scholarshipInfo;
 
   const detailsModalId = `detailsModal-${_id}`;
   const feedbackModalId = `feedbackModal-${_id}`;
-  const formattedDate = new Date(currentDate).toLocaleDateString("en-GB");
 
   const showDetailsModal = () => {
     document.getElementById(detailsModalId).showModal();
@@ -82,7 +73,7 @@ const ApplicationRows = ({ application }) => {
           </div>
         </div>
       </td>
-      <td>{scholarshipCategory}</td>
+      <td>{feedback || "No feedback yet"}</td>
       <td>
         <div className="flex items-center gap-3">
           <div className="avatar">
@@ -120,7 +111,11 @@ const ApplicationRows = ({ application }) => {
           >
             Feedback
           </button>
-          <ApplicationFeedbackModal feedbackModalId={feedbackModalId} />
+          <ApplicationFeedbackModal
+            feedbackModalId={feedbackModalId}
+            application={application}
+            refetch={refetch}
+          />
           <button className="btn btn-error text-white w-full">Cancel</button>
         </div>
       </td>
@@ -222,7 +217,7 @@ const ModeratorAllAppliedScholarships = () => {
           <thead className="font-montserrat">
             <tr>
               <th>University</th>
-              <th>Scholarship Category</th>
+              <th>Feedback</th>
               <th>Applicant</th>
               <th>Degree</th>
               <th>SSC GPA</th>
@@ -236,6 +231,7 @@ const ModeratorAllAppliedScholarships = () => {
               <ApplicationRows
                 key={application._id}
                 application={application}
+                refetch={refetch}
                 // handleDeleteScholarship={handleDeleteScholarship}
               />
             ))}
