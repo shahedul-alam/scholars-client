@@ -123,8 +123,6 @@ const ModeratorAllReviews = () => {
     retry: 1,
   });
 
-  console.log(data);
-
   useEffect(() => {
     // Only refetch if we have a user email
     if (dbUser?.role === "moderator") {
