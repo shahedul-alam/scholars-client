@@ -29,7 +29,30 @@ const fetchAllApplications = async (email, axiosSecure) => {
   }
 };
 
-const ApplicationRows = ({ application, refetch }) => {
+const cancelApplication = async (applicationId, email, axiosSecure) => {
+  if (!email) throw new Error("Email is required");
+
+  if (!applicationId) throw new Error("Application ID is required");
+
+  try {
+    const response = await axiosSecure.patch(
+      `/reject-application-moderator/${applicationId}?email=${email}`,
+      { status: "Rejected" }
+    );
+
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      const { status, data } = error.response;
+      if (status === 400 || status === 404) {
+        throw new Error(data.message);
+      }
+    }
+    throw new Error("Failed to delete review. Please try again later.");
+  }
+};
+
+const ApplicationRows = ({ application, refetch, handleCancelApplication }) => {
   const {
     _id,
     country,
@@ -91,7 +114,17 @@ const ApplicationRows = ({ application, refetch }) => {
       <td>{`${ssc} / 5`}</td>
       <td>{`${hsc} / 5`}</td>
       <td>
-        <span className="bg-orange badge text-white">{status}</span>
+        <span
+          className={`px-2 py-1 rounded-full text-xs text-white font-semibold ${
+            status === "pending"
+              ? "bg-warning"
+              : status === "approved"
+              ? "bg-success"
+              : "bg-error"
+          }`}
+        >
+          {status}
+        </span>
       </td>
       <td>
         <div className="space-y-2">
@@ -116,7 +149,13 @@ const ApplicationRows = ({ application, refetch }) => {
             application={application}
             refetch={refetch}
           />
-          <button className="btn btn-error text-white w-full">Cancel</button>
+          <button
+            className="btn btn-error text-white w-full"
+            onClick={() => handleCancelApplication(_id)}
+            disabled={status === "Rejected"}
+          >
+            Cancel
+          </button>
         </div>
       </td>
     </tr>
@@ -149,37 +188,36 @@ const ModeratorAllAppliedScholarships = () => {
     }
   }, [dbUser?.role, refetch]);
 
-  // const handleDeleteScholarship = (id) => {
-  //   Swal.fire({
-  //     title: "Are you sure?",
-  //     text: "You won't be able to revert this!",
-  //     icon: "warning",
-  //     showCancelButton: true,
-  //     confirmButtonColor: "#3085d6",
-  //     cancelButtonColor: "#d33",
-  //     confirmButtonText: "Yes, delete it!",
-  //   }).then(async (result) => {
-  //     if (result.isConfirmed) {
-  //       try {
-  //         const res = await deleteScholarship(id, user?.email, axiosSecure);
-  //         successToast(res.message);
-  //         refetch();
+  const handleCancelApplication = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, reject it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await cancelApplication(id, user?.email, axiosSecure);
 
-  //         Swal.fire({
-  //           title: "Deleted!",
-  //           text: "scholarship has been deleted.",
-  //           icon: "success",
-  //         });
-  //       } catch (error) {
-  //         const errorMessage =
-  //           error?.response?.data?.message ||
-  //           error.message ||
-  //           "Failed to delete scholarship";
-  //         errorToast(errorMessage);
-  //       }
-  //     }
-  //   });
-  // };
+          refetch();
+          Swal.fire({
+            title: "Rejected!",
+            text: "Application has been rejected.",
+            icon: "success",
+          });
+        } catch (error) {
+          const errorMessage =
+            error?.response?.data?.message ||
+            error.message ||
+            "Failed to reject application";
+          errorToast(errorMessage);
+        }
+      }
+    });
+  };
 
   if (isLoading) {
     return <Loading />;
@@ -232,7 +270,7 @@ const ModeratorAllAppliedScholarships = () => {
                 key={application._id}
                 application={application}
                 refetch={refetch}
-                // handleDeleteScholarship={handleDeleteScholarship}
+                handleCancelApplication={handleCancelApplication}
               />
             ))}
           </tbody>

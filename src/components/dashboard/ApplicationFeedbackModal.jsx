@@ -7,7 +7,7 @@ const ApplicationFeedbackModal = ({
   application,
   refetch,
 }) => {
-  const [feedback, setFeedback] = useState(null);
+  const [feedback, setFeedback] = useState("");
   const { user, successToast, errorToast } = useAuth();
   const axiosSecure = useAxiosSecure();
 
@@ -29,6 +29,7 @@ const ApplicationFeedbackModal = ({
       );
 
       refetch();
+      setFeedback("");
       closeModal();
       successToast(response.data.message);
     } catch (error) {
@@ -53,7 +54,8 @@ const ApplicationFeedbackModal = ({
             <div className="mb-4">
               <textarea
                 className="textarea textarea-bordered w-full"
-                placeholder="Write your feedback here"
+                placeholder="Type something ..."
+                value={feedback}
                 onChange={(e) => setFeedback(e.target.value)}
               ></textarea>
             </div>
