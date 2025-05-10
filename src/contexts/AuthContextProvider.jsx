@@ -49,26 +49,32 @@ const AuthContextProvider = ({ children }) => {
   }, []);
 
   const createNewUser = (email, password) => {
+    setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
   const signinUser = (email, password) => {
+    setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
   const signoutUser = () => {
+    setLoading(true);
     return signOut(auth);
   };
 
   const updateUserProfile = (userInfo) => {
+    setLoading(true);
     return updateProfile(auth.currentUser, { ...userInfo });
   };
 
   const resetUserPassword = (email) => {
+    setLoading(true);
     return sendPasswordResetEmail(auth, email);
   };
 
   const logInWithGoogle = () => {
+    setLoading(true);
     const provider = new GoogleAuthProvider();
 
     return signInWithPopup(auth, provider);

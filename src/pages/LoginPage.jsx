@@ -18,6 +18,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state || "/";
+  console.log(from, location.state)
 
   const handleSignInUser = (e) => {
     e.preventDefault();

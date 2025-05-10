@@ -2,7 +2,7 @@ import { axiosPublic } from "../hooks/useAxiosSecure";
 
 export const addUser = async (data) => {
   const response = await axiosPublic.post(
-    "http://localhost:5000/add-user",
+    "https://scholars-server-nu.vercel.app/add-user",
     data
   );
 
@@ -13,7 +13,7 @@ export const getUser = async (user) => {
   const { email } = user;
 
   const response = await axiosPublic.get(
-    `http://localhost:5000/get-user?email=${email}`
+    `https://scholars-server-nu.vercel.app/get-user?email=${email}`
   );
 
   return response.data;
@@ -21,7 +21,7 @@ export const getUser = async (user) => {
 
 export const cancelApplication = async (id) => {
   const response = await axiosPublic.delete(
-    `http://localhost:5000/applications/${id}`
+    `https://scholars-server-nu.vercel.app/applications/${id}`
   );
 
   return response.data;
@@ -29,7 +29,7 @@ export const cancelApplication = async (id) => {
 
 export const postReview = async (reviewDetails) => {
   const response = await axiosPublic.post(
-    `http://localhost:5000/review`,
+    `https://scholars-server-nu.vercel.app/review`,
     reviewDetails
   );
 
@@ -38,7 +38,7 @@ export const postReview = async (reviewDetails) => {
 
 export const deleteReview = async (id) => {
   const response = await axiosPublic.delete(
-    `http://localhost:5000/review/?applicationId=${id}`
+    `https://scholars-server-nu.vercel.app/review/?applicationId=${id}`
   );
 
   return response.data;
@@ -46,7 +46,7 @@ export const deleteReview = async (id) => {
 
 export const updateReview = async (id, updatedReviewInfo) => {
   const response = await axiosPublic.patch(
-    `http://localhost:5000/review/?applicationId=${id}`,
+    `https://scholars-server-nu.vercel.app/review/?applicationId=${id}`,
     updatedReviewInfo
   );
 

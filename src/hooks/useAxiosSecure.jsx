@@ -4,11 +4,11 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router";
 
 export const axiosPublic = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "https://scholars-server-nu.vercel.app",
 });
 
 export const axiosInstance = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "https://scholars-server-nu.vercel.app",
   withCredentials: true,
 });
 

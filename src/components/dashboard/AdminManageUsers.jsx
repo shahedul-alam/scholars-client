@@ -25,7 +25,29 @@ const fetchAllUsers = async (email, axiosSecure) => {
   }
 };
 
-const UserRows = ({ user, handleChangeRole }) => {
+const deleteUser = async (userId, email, axiosSecure) => {
+  if (!email) throw new Error("Email is required");
+
+  if (!userId) throw new Error("User ID is required");
+
+  try {
+    const response = await axiosSecure.delete(
+      `/users/${userId}?email=${email}`
+    );
+
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      const { status, data } = error.response;
+      if (status === 400 || status === 404) {
+        throw new Error(data.message);
+      }
+    }
+    throw new Error("Failed to delete user. Please try again later.");
+  }
+};
+
+const UserRows = ({ user, handleChangeRole, handleDeleteUser }) => {
   const { _id, displayName, photoURL, email, role } = user;
 
   return (
@@ -44,9 +66,14 @@ const UserRows = ({ user, handleChangeRole }) => {
       </td>
       <td>{email}</td>
       <td>
-        <details className="dropdown">
-          <summary className="btn m-1">{role}</summary>
-          <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+        <div className="dropdown">
+          <div tabIndex={0} role="button" className="btn m-1">
+            {role}
+          </div>
+          <ul
+            tabIndex={0}
+            className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
+          >
             <li>
               <button
                 onClick={() =>
@@ -87,12 +114,12 @@ const UserRows = ({ user, handleChangeRole }) => {
               </button>
             </li>
           </ul>
-        </details>
+        </div>
       </td>
       <td>
         <button
           className="btn btn-error text-white"
-          // onClick={() => handleDeleteReview(applicationId)}
+          onClick={() => handleDeleteUser(_id)}
         >
           Delete
         </button>
@@ -127,36 +154,36 @@ const AdminManageUsers = () => {
     }
   }, [dbUser?.role, refetch]);
 
-  // const handleCancelApplication = (id) => {
-  //   Swal.fire({
-  //     title: "Are you sure?",
-  //     text: "You won't be able to revert this!",
-  //     icon: "warning",
-  //     showCancelButton: true,
-  //     confirmButtonColor: "#3085d6",
-  //     cancelButtonColor: "#d33",
-  //     confirmButtonText: "Yes, reject it!",
-  //   }).then(async (result) => {
-  //     if (result.isConfirmed) {
-  //       try {
-  //         const res = await cancelApplication(id, user?.email, axiosSecure);
+  const handleDeleteUser = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await deleteUser(id, user?.email, axiosSecure);
 
-  //         refetch();
-  //         Swal.fire({
-  //           title: "Rejected!",
-  //           text: "Application has been rejected.",
-  //           icon: "success",
-  //         });
-  //       } catch (error) {
-  //         const errorMessage =
-  //           error?.response?.data?.message ||
-  //           error.message ||
-  //           "Failed to reject application";
-  //         errorToast(errorMessage);
-  //       }
-  //     }
-  //   });
-  // };
+          refetch();
+          Swal.fire({
+            title: "Deleted!",
+            text: "User has been deleted.",
+            icon: "success",
+          });
+        } catch (error) {
+          const errorMessage =
+            error?.response?.data?.message ||
+            error.message ||
+            "Failed to delete user";
+          errorToast(errorMessage);
+        }
+      }
+    });
+  };
 
   const handleChangeRole = async ({ userId, prevRole, newRole }) => {
     if (prevRole === newRole) {
@@ -233,6 +260,7 @@ const AdminManageUsers = () => {
                 key={user._id}
                 user={user}
                 handleChangeRole={handleChangeRole}
+                handleDeleteUser={handleDeleteUser}
               />
             ))}
           </tbody>
