@@ -27,6 +27,8 @@ import ModeratorMangeScholarships from "../components/dashboard/ModeratorMangeSc
 import ModeratorAllReviews from "../components/dashboard/ModeratorAllReviews";
 import ModeratorAllAppliedScholarships from "../components/dashboard/ModeratorAllAppliedScholarships";
 import ModeratorAddScholarship from "../components/dashboard/ModeratorAddScholarship";
+import AdminRoute from "./AdminRoute";
+import AdminManageUsers from "../components/dashboard/AdminManageUsers";
 
 const router = createBrowserRouter([
   {
@@ -110,7 +112,7 @@ const router = createBrowserRouter([
             path: "reviews",
             element: <UserReviewsScreen />,
           },
-          // moderator routes
+          // moderator & admin routes
           {
             path: "manage-scholarships",
             element: (
@@ -143,6 +145,16 @@ const router = createBrowserRouter([
               </ModeratorRoute>
             ),
           },
+          // admin routes
+          {
+            path: "manage-users",
+            element: (
+              <AdminRoute>
+                <AdminManageUsers />
+              </AdminRoute>
+            ),
+          },
+          
         ],
       },
       {

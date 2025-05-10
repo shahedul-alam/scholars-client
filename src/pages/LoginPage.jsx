@@ -45,7 +45,6 @@ const LoginPage = () => {
     logInWithGoogle()
       .then(async (result) => {
         const user = result.user;
-
         await addUser(user);
 
         const userResult = await getUser(user);

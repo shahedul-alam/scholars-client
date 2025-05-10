@@ -1,6 +1,14 @@
+import useAuth from "../../hooks/useAuth";
+import Loading from "../../shared/Loading";
 import ScholarshipForm from "./ScholarshipForm";
 
 const ModeratorAddScholarship = () => {
+  const { isLoading } = useAuth();
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <section className="overflow-x-auto grow p-4">
       <h2 className="text-2xl font-montserrat font-bold mb-6">
