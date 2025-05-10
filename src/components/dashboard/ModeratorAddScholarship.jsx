@@ -1,10 +1,13 @@
-import React from 'react';
+import ScholarshipForm from "./ScholarshipForm";
 
 const ModeratorAddScholarship = () => {
   return (
-    <div>
-      ModeratorAddScholarship
-    </div>
+    <section className="overflow-x-auto grow p-4">
+      <h2 className="text-2xl font-montserrat font-bold mb-6">
+        Add Scholarship
+      </h2>
+      <ScholarshipForm />
+    </section>
   );
 };
 

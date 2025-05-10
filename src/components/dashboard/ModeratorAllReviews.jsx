@@ -192,8 +192,6 @@ const ModeratorAllReviews = () => {
     );
   }
 
-  console.log(data);
-
   return (
     <section className="overflow-x-auto grow p-4">
       <h2 className="text-2xl font-montserrat font-bold mb-6">
