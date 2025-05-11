@@ -8,13 +8,13 @@ const AdminRoute = ({ children }) => {
   const hasShownToast = useRef(false);
 
   useEffect(() => {
-    if (!loading && dbUser?.role !== "admin" && !hasShownToast.current) {
+    if (dbUser?.role !== "admin" && !hasShownToast.current) {
       errorToast("You are not authorized to access that page.");
       hasShownToast.current = true;
     }
-  }, [loading, dbUser, errorToast]);
+  }, [dbUser, errorToast]);
 
-  if (loading) return <Loading />;
+  if (!dbUser || loading) return <Loading />;
 
   if (dbUser?.role === "admin") return children;
 

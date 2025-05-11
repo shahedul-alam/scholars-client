@@ -3,9 +3,9 @@ import Loading from "../../shared/Loading";
 import ScholarshipForm from "./ScholarshipForm";
 
 const ModeratorAddScholarship = () => {
-  const { isLoading } = useAuth();
+  const { loading } = useAuth();
 
-  if (isLoading) {
+  if (loading) {
     return <Loading />;
   }
 

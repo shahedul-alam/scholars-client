@@ -237,10 +237,9 @@ const ReviewRow = ({
 };
 
 const UserReviewsScreen = () => {
-  const { user, successToast, errorToast } = useAuth();
+  const { user, loading, successToast, errorToast } = useAuth();
   const axiosSecure = useAxiosSecure();
 
-  // All hooks must be called unconditionally at the top level
   const {
     data = [],
     isLoading,
@@ -255,14 +254,6 @@ const UserReviewsScreen = () => {
     enabled: !!user?.email,
     retry: 1,
   });
-
-  // useEffect to handle initial data loading
-  useEffect(() => {
-    // Only refetch if we have a user email
-    if (user?.email) {
-      refetch();
-    }
-  }, [user?.email, refetch]);
 
   const handleDeleteReview = useCallback(
     (id) => {
@@ -309,7 +300,7 @@ const UserReviewsScreen = () => {
   );
 
   // Render loading state if necessary
-  if (isLoading) {
+  if (isLoading || loading) {
     return <Loading />;
   }
 

@@ -94,7 +94,7 @@ const router = createBrowserRouter([
         ),
         errorElement: <ErrorPage />,
         children: [
-          // common routes
+          // common route
           {
             index: true,
             element: <Navigate to="profile" replace />,

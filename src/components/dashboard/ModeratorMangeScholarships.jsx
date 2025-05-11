@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
-import { useEffect } from "react";
 import { Link } from "react-router";
 import Loading from "../../shared/Loading";
 import ErrorState from "../../shared/ErrorState";
@@ -109,7 +108,7 @@ const ScholarshipRows = ({ scholarship, handleDeleteScholarship }) => {
 };
 
 const ModeratorMangeScholarships = () => {
-  const { user, dbUser, successToast, errorToast } = useAuth();
+  const { user, loading, successToast, errorToast } = useAuth();
   const axiosSecure = useAxiosSecure();
 
   const {
@@ -123,16 +122,9 @@ const ModeratorMangeScholarships = () => {
     queryFn: () => fetchAllScholarships(user?.email, axiosSecure),
     staleTime: 30000,
     refetchOnWindowFocus: true,
-    enabled: !!dbUser?.role,
+    enabled: !loading,
     retry: 1,
   });
-
-  useEffect(() => {
-    // Only refetch if we have a user email
-    if (dbUser?.role === "moderator") {
-      refetch();
-    }
-  }, [dbUser?.role, refetch]);
 
   const handleDeleteScholarship = (id) => {
     Swal.fire({
@@ -166,7 +158,7 @@ const ModeratorMangeScholarships = () => {
     });
   };
 
-  if (isLoading) {
+  if (isLoading || loading) {
     return <Loading />;
   }
 

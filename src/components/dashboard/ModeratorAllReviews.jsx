@@ -4,7 +4,6 @@ import Loading from "../../shared/Loading";
 import ErrorState from "../../shared/ErrorState";
 import EmptyState from "../../shared/EmptyState";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
 import Swal from "sweetalert2";
 
 const fetchAllReviews = async (email, axiosSecure) => {
@@ -105,7 +104,7 @@ const ReviewsRows = ({ review, handleDeleteReview }) => {
 };
 
 const ModeratorAllReviews = () => {
-  const { user, dbUser, successToast, errorToast } = useAuth();
+  const { user, loading, successToast, errorToast } = useAuth();
   const axiosSecure = useAxiosSecure();
 
   const {
@@ -119,16 +118,9 @@ const ModeratorAllReviews = () => {
     queryFn: () => fetchAllReviews(user?.email, axiosSecure),
     staleTime: 30000,
     refetchOnWindowFocus: true,
-    enabled: !!dbUser?.role,
+    enabled: !loading,
     retry: 1,
   });
-
-  useEffect(() => {
-    // Only refetch if we have a user email
-    if (dbUser?.role === "moderator") {
-      refetch();
-    }
-  }, [dbUser?.role, refetch]);
 
   const handleDeleteReview = (applicationId) => {
     Swal.fire({
@@ -166,7 +158,7 @@ const ModeratorAllReviews = () => {
     });
   };
 
-  if (isLoading) {
+  if (isLoading || loading) {
     return <Loading />;
   }
 

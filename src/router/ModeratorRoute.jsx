@@ -8,13 +8,13 @@ const ModeratorRoute = ({ children }) => {
   const hasShownToast = useRef(false);
 
   useEffect(() => {
-    if (!loading && dbUser?.role === "user" && !hasShownToast.current) {
+    if (dbUser?.role === "user" && !hasShownToast.current) {
       errorToast("You are not authorized to access that page.");
       hasShownToast.current = true;
     }
-  }, [loading, dbUser, errorToast]);
+  }, [dbUser, errorToast]);
 
-  if (loading) return <Loading />;
+  if (!dbUser || loading) return <Loading />;
 
   if (dbUser?.role === "moderator" || dbUser?.role === "admin") return children;
 

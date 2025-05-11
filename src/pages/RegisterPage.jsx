@@ -2,13 +2,11 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import banner from "../assets/login-page-banner.JPG";
 import useAuth from "../hooks/useAuth";
-import { addUser, getUser } from "../utilities/utilities";
+import { addUser } from "../utilities/utilities";
 // import { Helmet } from "react-helmet-async";
 
 const RegisterPage = () => {
   const {
-    setDbUser,
-    setDbUserInitialized,
     createNewUser,
     updateUserProfile,
     logInWithGoogle,
@@ -45,13 +43,7 @@ const RegisterPage = () => {
               };
 
               await addUser(user);
-
-              const result = await getUser(user);
-              setDbUser(result);
-              setDbUserInitialized(true);
-
               successToast("Congratulations! Registered successfully");
-
               navigate(from, { replace: true });
             })
             .catch(() => {
@@ -69,16 +61,8 @@ const RegisterPage = () => {
   const handleLogInWithGoogle = () => {
     logInWithGoogle()
       .then(async (result) => {
-        const user = result.user;
-
-        await addUser(user);
-
-        const userResult = await getUser(user);
-        setDbUser(userResult);
-        setDbUserInitialized(true);
-
+        await addUser(result.user);
         successToast("Congratulations! Registered successfully");
-
         navigate(from, { replace: true });
       })
       .catch(() => {

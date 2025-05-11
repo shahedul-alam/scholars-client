@@ -1,24 +1,20 @@
 import { Link, useLocation, useNavigate } from "react-router";
 import banner from "../assets/login-page-banner.JPG";
 import useAuth from "../hooks/useAuth";
-import { addUser, getUser } from "../utilities/utilities";
+import { addUser } from "../utilities/utilities";
 
 // import { Helmet } from "react-helmet-async";
 
 const LoginPage = () => {
   const {
-    setDbUser,
-    setDbUserInitialized,
     signinUser,
     logInWithGoogle,
     successToast,
     errorToast,
-    loading,
   } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state || "/";
-  console.log(from, location.state)
 
   const handleSignInUser = (e) => {
     e.preventDefault();
@@ -29,12 +25,7 @@ const LoginPage = () => {
 
     signinUser(email, password)
       .then(async () => {
-        const result = await getUser({ email });
-        setDbUser(result);
-        setDbUserInitialized(true);
-
         successToast("Welcome back! Logged in successfully.");
-
         navigate(from, { replace: true });
       })
       .catch((error) => {
@@ -45,15 +36,8 @@ const LoginPage = () => {
   const handleLogInWithGoogle = () => {
     logInWithGoogle()
       .then(async (result) => {
-        const user = result.user;
-        await addUser(user);
-
-        const userResult = await getUser(user);
-        setDbUser(userResult);
-        setDbUserInitialized(true);
-
+        await addUser(result.user);
         successToast("Welcome back! Logged in successfully.");
-
         navigate(from, { replace: true });
       })
       .catch(() => {
@@ -112,7 +96,7 @@ const LoginPage = () => {
                 </label>
               </div>
               <div className="form-control mt-6">
-                <button className="btn w-full bg-orange text-white font-hind">
+                <button type="submit" className="btn w-full bg-orange text-white font-hind">
                   Login / Sign In
                 </button>
               </div>

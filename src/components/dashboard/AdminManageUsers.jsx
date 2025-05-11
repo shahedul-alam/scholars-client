@@ -2,7 +2,6 @@ import Swal from "sweetalert2";
 import EmptyState from "../../shared/EmptyState";
 import ErrorState from "../../shared/ErrorState";
 import Loading from "../../shared/Loading";
-import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useAuth from "../../hooks/useAuth";
@@ -129,7 +128,7 @@ const UserRows = ({ user, handleChangeRole, handleDeleteUser }) => {
 };
 
 const AdminManageUsers = () => {
-  const { user, dbUser, successToast, errorToast } = useAuth();
+  const { user, loading, successToast, errorToast } = useAuth();
   const axiosSecure = useAxiosSecure();
 
   const {
@@ -143,16 +142,9 @@ const AdminManageUsers = () => {
     queryFn: () => fetchAllUsers(user?.email, axiosSecure),
     staleTime: 30000,
     refetchOnWindowFocus: true,
-    enabled: !!dbUser?.role,
+    enabled: !loading,
     retry: 1,
   });
-
-  useEffect(() => {
-    // Only refetch if we have a user email
-    if (dbUser?.role === "moderator") {
-      refetch();
-    }
-  }, [dbUser?.role, refetch]);
 
   const handleDeleteUser = (id) => {
     Swal.fire({
@@ -166,7 +158,7 @@ const AdminManageUsers = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const res = await deleteUser(id, user?.email, axiosSecure);
+          await deleteUser(id, user?.email, axiosSecure);
 
           refetch();
           Swal.fire({
@@ -213,14 +205,14 @@ const AdminManageUsers = () => {
     }
   };
 
-  if (isLoading) {
+  if (isLoading || loading) {
     return <Loading />;
   }
 
   if (isError) {
     return (
       <ErrorState
-        title="Error Loading Applications"
+        title="Error Loading Users"
         message={error.message}
         actionLabel="Try again"
         action={refetch}
@@ -231,8 +223,8 @@ const AdminManageUsers = () => {
   if (!data?.length) {
     return (
       <EmptyState
-        title="No Applications Found"
-        message="Nobody haven't applied for any scholarships yet."
+        title="No Users Found"
+        message="Nobody haven't signed up for scholars yet."
         actionLabel="Browse Scholarships"
         actionLink="/all-scholarship"
       />

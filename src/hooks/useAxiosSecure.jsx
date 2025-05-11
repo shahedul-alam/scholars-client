@@ -25,6 +25,8 @@ const useAxiosSecure = () => {
           await signoutUser();
           // navigating to the user to the login page
           navigate("/login");
+          // showing error
+          errorToast(error?.response?.data?.message);
         }
         return Promise.reject(error);
       }

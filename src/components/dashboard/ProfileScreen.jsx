@@ -1,8 +1,9 @@
 import { useState } from "react";
 import useAuth from "../../hooks/useAuth";
+import Loading from "../../shared/Loading";
 
 const ProfileScreen = () => {
-  const { user, dbUser } = useAuth();
+  const { user, loading, dbUser } = useAuth();
   const { displayName, email, emailVerified, photoURL } = user || {};
   const [imageError, setImageError] = useState(false);
 
@@ -20,6 +21,8 @@ const ProfileScreen = () => {
       .toUpperCase()
       .substring(0, 2);
   };
+
+  if (loading) <Loading />;
 
   return (
     <section className="grow px-4 md:px-0">

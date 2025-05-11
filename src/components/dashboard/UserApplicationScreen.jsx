@@ -11,7 +11,7 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import ErrorState from "../../shared/ErrorState";
 
 const fetchAllApplications = async (email, axiosSecure) => {
-  if (!email) throw new Error("Email is required to fetch applications");
+  if (!email) throw new Error("Email is required");
 
   try {
     const response = await axiosSecure.get(`/applications?email=${email}`);
@@ -85,7 +85,7 @@ const ApplicationRows = ({
       <td>${scholarshipInfo.serviceCharge}</td>
       <td>
         <span
-          className={`badge ${
+          className={`badge text-white ${
             app.status === "approved"
               ? "badge-success"
               : app.status === "pending"
@@ -194,7 +194,7 @@ const ApplicationRows = ({
 };
 
 const UserApplicationScreen = () => {
-  const { user, successToast, errorToast } = useAuth();
+  const { user, loading, successToast, errorToast } = useAuth();
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
 
@@ -213,12 +213,13 @@ const UserApplicationScreen = () => {
     retry: 1,
   });
 
-  useEffect(() => {
-    // Only refetch if we have a user email
-    if (user?.email) {
-      refetch();
-    }
-  }, [user?.email, refetch]);
+  // useEffect(() => {
+  //   // Only refetch if we have a user email
+  //   if (user?.email) {
+  //     refetch();
+  //     console.log("inside use")
+  //   }
+  // }, [user?.email, refetch]);
 
   const handleCancelApplication = (id) => {
     Swal.fire({
@@ -287,7 +288,7 @@ const UserApplicationScreen = () => {
     }
   };
 
-  if (isLoading) {
+  if (isLoading || loading) {
     return <Loading />;
   }
 

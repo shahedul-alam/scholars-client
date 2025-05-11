@@ -2,7 +2,6 @@ import Swal from "sweetalert2";
 import EmptyState from "../../shared/EmptyState";
 import ErrorState from "../../shared/ErrorState";
 import Loading from "../../shared/Loading";
-import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
@@ -163,7 +162,7 @@ const ApplicationRows = ({ application, refetch, handleCancelApplication }) => {
 };
 
 const ModeratorAllAppliedScholarships = () => {
-  const { user, dbUser, successToast, errorToast } = useAuth();
+  const { user, loading, successToast, errorToast } = useAuth();
   const axiosSecure = useAxiosSecure();
 
   const {
@@ -177,16 +176,9 @@ const ModeratorAllAppliedScholarships = () => {
     queryFn: () => fetchAllApplications(user?.email, axiosSecure),
     staleTime: 30000,
     refetchOnWindowFocus: true,
-    enabled: !!dbUser?.role,
+    enabled: !loading,
     retry: 1,
   });
-
-  useEffect(() => {
-    // Only refetch if we have a user email
-    if (dbUser?.role === "moderator") {
-      refetch();
-    }
-  }, [dbUser?.role, refetch]);
 
   const handleCancelApplication = (id) => {
     Swal.fire({
@@ -219,7 +211,7 @@ const ModeratorAllAppliedScholarships = () => {
     });
   };
 
-  if (isLoading) {
+  if (isLoading || loading) {
     return <Loading />;
   }
 

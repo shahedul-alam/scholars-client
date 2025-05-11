@@ -20,23 +20,17 @@ export const AuthContext = createContext();
 const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [dbUser, setDbUser] = useState(null);
-  const [dbUserInitialized, setDbUserInitialized] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
 
-      if (currentUser && !dbUserInitialized) {
-        const result = await getUser(currentUser);
-        setDbUser(result);
-
+      if (currentUser) {
         axiosInstance
           .post("/get-token", { email: currentUser.email })
           .then((res) => setLoading(false));
       } else {
-        setDbUser(null);
-
         axiosInstance
           .post("/remove-token", {})
           .then((res) => setLoading(false));
@@ -47,6 +41,21 @@ const AuthContextProvider = ({ children }) => {
       unsubscribe();
     };
   }, []);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (user) {
+        try {
+          const result = await getUser(user);
+          setDbUser(result);
+        } catch (error) {
+          console.error("Error fetching user:", error);
+        }
+      }
+    };
+
+    fetchUser();
+  }, [user]);
 
   const createNewUser = (email, password) => {
     setLoading(true);
@@ -64,12 +73,10 @@ const AuthContextProvider = ({ children }) => {
   };
 
   const updateUserProfile = (userInfo) => {
-    setLoading(true);
     return updateProfile(auth.currentUser, { ...userInfo });
   };
 
   const resetUserPassword = (email) => {
-    setLoading(true);
     return sendPasswordResetEmail(auth, email);
   };
 
@@ -110,8 +117,6 @@ const AuthContextProvider = ({ children }) => {
   const authInfo = {
     user,
     dbUser,
-    setDbUser,
-    setDbUserInitialized,
     loading,
     createNewUser,
     signinUser,
